@@ -12,7 +12,7 @@
 // Output Format:
 //  On each line, print the entire array after every iteration
 // Constraints:
-//  1 <= s <= 1000
+//  1 <= size of array <= 1000
 // ************************************************************************************
 
 #include <iostream>
