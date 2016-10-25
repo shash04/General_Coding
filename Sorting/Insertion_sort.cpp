@@ -1,3 +1,20 @@
+// ************************************************************************************
+// Insertion Sort algorithm:
+// Compare consecutive elements for each iteration. If smaller element is placed after
+// greater element, shift the array to right until the smaller element can be fitted
+// such that it is at final sorted position.
+// Worst case Complexity: O(n^2)
+//
+// Input Format:
+//  There will be two lines of input:
+//      the size of the array (int)
+//      a list of numbers (int) that makes up the array
+// Output Format:
+//  On each line, print the entire array after every iteration
+// Constraints:
+//  1 <= s <= 1000
+// ************************************************************************************
+
 #include <iostream>
 using namespace std;
 
