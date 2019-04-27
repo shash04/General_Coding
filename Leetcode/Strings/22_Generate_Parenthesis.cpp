@@ -15,16 +15,20 @@
 class Solution {
 public:
     vector<string> generateParenthesis(int n) {
-        vector<string> res;
-        addingpar(res, "", n, 0);
-        return res;
+        vector<string> ret;
+        genPar(ret, "", n, 0);
+        return ret;
     }
-    void addingpar(vector<string> &v, string str, int n, int m){
+    
+    void genPar(vector<string> &vec, string str, int n, int m)
+    {
         if(n==0 && m==0) {
-            v.push_back(str);
+            vec.push_back(str);
             return;
         }
-        if(m > 0){ addingpar(v, str+")", n, m-1); }
-        if(n > 0){ addingpar(v, str+"(", n-1, m+1); }
+        if(m > 0)
+            genPar(vec, str + ")", n, m-1);
+        if(n > 0)
+            genPar(vec, str + "(", n-1, m+1);
     }
 };
