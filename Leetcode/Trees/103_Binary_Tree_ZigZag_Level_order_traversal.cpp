@@ -59,3 +59,33 @@ public:
         return vec;
     }
 };
+
+// Optimal time solution
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (root == NULL) return res;
+        queue<TreeNode*> q;
+        q.push(root);
+        
+        bool forward = false;
+        while (!q.empty()) {
+            int size = q.size();
+            forward = !forward;
+            vector<int> vec;
+            while (size) {
+                TreeNode *t = q.front();
+                q.pop();
+                vec.push_back(t->val);
+                if (t->left) q.push(t->left);
+                if (t->right) q.push(t->right);
+                size--;
+            }
+            if (!forward) reverse(vec.begin(), vec.end());
+            res.push_back(vec);
+        }
+        
+        return res;
+    }
+};
