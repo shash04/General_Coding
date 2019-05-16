@@ -24,12 +24,14 @@ public:
         stringstream ss(s);
         string word;
         string revString = "";
+        
         while(ss>>word)
         {
-            revString = word + " " + revString;
-        }
-        
-        revString = revString.substr(0, revString.size()-1);
+            if(revString.size() == 0)
+                revString += word;
+            else
+                revString = word + " " + revString;
+        }        
         return revString;
     }
 };
