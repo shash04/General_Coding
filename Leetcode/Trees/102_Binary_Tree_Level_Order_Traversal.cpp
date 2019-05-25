@@ -28,7 +28,7 @@
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        queue<TreeNode*> q1, q2;
+        queue<TreeNode*> q1;
         vector<int> vec;
         vector<vector<int>> ret;
         
@@ -36,15 +36,24 @@ public:
             return ret;
         
         q1.push(root);
-        
-        while(!q1.empty() || !q2.empty())
+        int l1 = 1;         // Number of nodes in current level
+        int l2 = 0;         // Count for number of nodes in next level 
+        while(!q1.empty())
         {
-            while(!q1.empty())
+            while(l1--)
             {
                 TreeNode* curr = q1.front();
                 q1.pop();
-                if(curr->left) q2.push(curr->left);
-                if(curr->right) q2.push(curr->right);
+                if(curr->left)
+                {
+                    q1.push(curr->left);
+                    l2++;
+                }
+                if(curr->right)
+                {
+                    q1.push(curr->right);
+                    l2++;
+                }
                 vec.push_back(curr->val);
             }
             if(vec.size())
@@ -52,19 +61,8 @@ public:
                 ret.push_back(vec);
                 vec.clear();
             }        
-            while(!q2.empty())
-            {
-                TreeNode* curr = q2.front();
-                q2.pop();
-                if(curr->left) q1.push(curr->left);
-                if(curr->right) q1.push(curr->right);
-                vec.push_back(curr->val);
-            }
-            if(vec.size())
-            {
-                ret.push_back(vec);
-                vec.clear();
-            }
+            l1 = l2;
+            l2 = 0;
         }
         return ret;
     }
