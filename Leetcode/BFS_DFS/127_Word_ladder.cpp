@@ -27,7 +27,7 @@
 
 // https://leetcode.com/problems/word-ladder/
 
-// Concept = Start with beginWord and visit neighbors and then theor non-visited neghbors (BFS) till we reach endWord.
+// Concept = Start with beginWord and visit neighbors and then their non-visited neghbors and so on (BFS) till we reach endWord.
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
