@@ -22,7 +22,7 @@
 // Output: 4 
 // Explanation: The longest increasing path is [3, 4, 5, 6]. Moving diagonally is not allowed.
 
-// https://leetcode.com/explore/interview/card/google/61/trees-and-graphs/3072/
+// https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
 
 // Concept: Keep track of max path for each cell in mtarix (split into subproblems). Typical DP problem.
 class Solution {
