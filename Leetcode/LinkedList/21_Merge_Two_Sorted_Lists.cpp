@@ -63,9 +63,7 @@ public:
     }
 };
 
-
 // Alternate solution - recursive 
-/*
 ListNode* merge_lists(ListNode* head_1, ListNode* head_2)
 {
 	ListNode* result = NULL;
@@ -85,6 +83,4 @@ ListNode* merge_lists(ListNode* head_1, ListNode* head_2)
 	}
 	return result;
 }
-
-*/
 

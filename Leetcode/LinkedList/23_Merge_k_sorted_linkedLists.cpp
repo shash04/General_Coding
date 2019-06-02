@@ -56,15 +56,21 @@ public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if (lists.size() == 0)
             return nullptr;
+        
         int count = lists.size(), interval = 1;
-        while (interval < count) {
+        
+        while (interval < count)
+        {
             for (int i = 0; i < count - interval; i += interval *2)
+            {
                 lists[i] = merge_two_lists(lists[i], lists[i + interval]);
+            }
             interval = interval * 2;
         }
+        
         return lists[0];
     }
-
+    
     ListNode* merge_two_lists(ListNode* head_1, ListNode* head_2)
     {
         ListNode* result = NULL;
