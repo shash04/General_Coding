@@ -98,7 +98,7 @@ public:
 };
 
 // ***********************************************************************************
-// NON OPTIMAL SOLUTION.... TIME LIMIT EXCEEDED
+// NON OPTIMAL SOLUTION.... BUFFER OVERFLOW
 // ***********************************************************************************
 class Solution {
 public:
