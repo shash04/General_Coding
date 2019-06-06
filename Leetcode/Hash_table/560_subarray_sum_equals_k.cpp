@@ -12,6 +12,14 @@
 // Input:nums = [-1,-1,1], k = 0
 // Output: 1
 
+// https://leetcode.com/problems/subarray-sum-equals-k/
+
+// Logic: if sum[i] - sum[j] == 0, that means  sum of elements between i & j is 0.
+// Similartly if sum[i] - sum[j] == k, that means sum of elements between i & j == k
+// Create a hash map in the form (sum till index i, number of occurences of that sum)
+// For every index increment sum. Check if hash_map[sum-k] exists.
+//      If yes = count += no of occurences of (sum-k).
+//      If No = add hash map entry
 class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
