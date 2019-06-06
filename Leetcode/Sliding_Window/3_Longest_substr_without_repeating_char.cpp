@@ -18,21 +18,26 @@
 
 // https://leetcode.com/problems/longest-substring-without-repeating-characters/
 
+// Logic: Maintain a ptr that indicates the starting index for non-repeating char string
+// If there is any char repeated, move the ptr by 1 to right of index of that char stored in map
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        vector<int> vec(256, -1);
-        int start = -1;
-        int maxLen = 0;
+        if(!s.size())
+            return 0;
+        
+        unordered_map<char, int> m1;
+        int ans = 0;
+        int ptr = 0;
         
         for(int i=0; i<s.size(); i++)
         {
-            if(vec[s[i]] > start)
-                start = vec[s[i]];
-            vec[s[i]] = i;
-            maxLen = max(maxLen, i-start);
+            if(m1.find(s[i]) != m1.end())
+                ptr = max(ptr, m1[s[i]] + 1);
+            m1[s[i]] = i;
+            ans = max(ans, i-ptr+1);
         }
-        return maxLen;
+        return ans;
     }
 };
 
