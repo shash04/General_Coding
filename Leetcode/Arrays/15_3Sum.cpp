@@ -26,7 +26,7 @@ public:
             int start = i+1;
             int end = nums.size()-1;
             
-            if(target < 0)                              // Already in positive range. All negative numbers to left
+            if(target < 0)                              // Already in positive range. All/No negative numbers to left
                 break;
             
             while(start < end)
