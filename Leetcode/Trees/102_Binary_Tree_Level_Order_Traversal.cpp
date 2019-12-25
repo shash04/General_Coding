@@ -25,6 +25,40 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+
+// Solution 1:
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> ret;
+        if(!root)
+            return ret;
+        
+        vector<TreeNode*> v1;
+        v1.push_back(root);
+        
+        while(!v1.empty())
+        {
+            vector<TreeNode*> temp;
+            vector<int> v2;
+            for(int i=0; i<v1.size(); i++)
+            {
+                if(v1[i]->left)
+                    temp.push_back(v1[i]->left);
+                if(v1[i]->right)
+                    temp.push_back(v1[i]->right);
+
+                v2.push_back(v1[i]->val);
+            }
+            ret.push_back(v2);
+            v1 = temp;
+        }
+        
+        return ret;
+    }
+};
+
+// Solution 2:
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
@@ -67,4 +101,3 @@ public:
         return ret;
     }
 };
-
