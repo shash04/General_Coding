@@ -42,7 +42,7 @@ public:
         }
         T[0][0] = true;
         
-        for(int j=1; j<pLen+1; j++)
+        for(int j=1; j<pLen+1; j++)         // Deals with patterns like a* or a*b* or a*b*c*
         {
             if(p[j-1] == '*')
                 T[0][j] = T[0][j-2];
