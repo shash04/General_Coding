@@ -20,6 +20,51 @@
 
 // https://leetcode.com/contest/weekly-contest-139/problems/greatest-common-divisor-of-strings/
 
+// ##############################################################################################
+// Faster solution:
+// ##############################################################################################
+
+// Concept: length of gcd string should be the gcd of lengths of two strings
+// Get GCD and add both strings as totStr
+// gcdStr should repeat after every lenGcd in totStr
+
+class Solution {
+public:
+    string gcdOfStrings(string str1, string str2) {
+        if(str1 == str2)
+            return str1;
+        
+        int len1 = str1.size();
+        int len2 = str2.size();
+        
+        if(len2 > len1)
+            return gcdOfStrings(str2, str1);
+        
+        int lenGcd = getGcd(len1, len2);
+        string gcdStr = str1.substr(0, lenGcd);
+        string totStr = str1 + str2;
+        
+        for(int i=0; i<len1+len2; i += lenGcd)
+        {
+            if(totStr.substr(i, lenGcd) != gcdStr)
+                return "";
+        }
+        return gcdStr;
+    }
+    
+    int getGcd(int a, int b)
+    {
+        if(a == 0)
+            return b;
+        else
+            return getGcd(b % a, a);
+    }
+};
+
+// ##############################################################################################
+// Slower solution:
+// ##############################################################################################
+
 class Solution {
 public:
     string gcdOfStrings(string str1, string str2) 
