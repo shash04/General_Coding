@@ -24,6 +24,7 @@
 class Solution {
 public:
     const static int NUM_CHILDREN = 26;
+    
     struct TrieNode
     {
         TrieNode* children[NUM_CHILDREN];
@@ -33,10 +34,12 @@ public:
     TrieNode* createNode(void)
     {
         TrieNode* newNode = new TrieNode;
+        
         for(int i=0; i<NUM_CHILDREN; i++)
         {
             newNode->children[i] = NULL;
         }
+        
         newNode->endOfWord = false;
         return newNode;
     }
@@ -44,6 +47,7 @@ public:
     void addWord(TrieNode* root, string str)
     {
         TrieNode* iter = root;
+        
         for(int i=0; i<str.size(); i++)
         {
             int index = str[i] - 'a';
@@ -51,6 +55,7 @@ public:
                 iter->children[index] = createNode();
             iter = iter->children[index];
         }
+        
         iter->endOfWord = true;
     }
     
@@ -62,6 +67,7 @@ public:
         
         // Check if curr char exists in trie
         int index = board[x][y] - 'a';
+        
         if(root->children[index] != NULL)
         {
             curr_str    += board[x][y];
@@ -85,12 +91,14 @@ public:
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
         // Create a trie structure from words dict
         TrieNode* root = createNode();
-        for(auto i : words)
-            addWord(root, i);
+        
+        for(auto word : words)
+            addWord(root, word);
         
         // DFS for every element in board to look for matching word in trie
         set<string> resultSet;
         vector<string> resultVec;
+        
         for(int x=0; x<board.size(); x++)
         {
             for(int y=0; y<board[0].size(); y++)
@@ -102,6 +110,7 @@ public:
         
         for(auto word : resultSet)
             resultVec.push_back(word);
+        
         return resultVec;
     }
 };
