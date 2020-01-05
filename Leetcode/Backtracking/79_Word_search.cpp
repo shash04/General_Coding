@@ -15,7 +15,55 @@
 
 // https://leetcode.com/problems/word-search/
 
-// Faster solution
+// Fastest Solution:
+class Solution {
+public:
+    vector<pair<int,int>> dirs = {{1,0}, {0,1}, {-1,0}, {0,-1}};
+    int nR, nC;
+    
+    bool exist(vector<vector<char>>& board, string word) {
+        nR = board.size();
+        nC = board[0].size();
+        
+        for(int i=0; i<nR; i++)
+        {
+            for(int j=0; j<nC; j++)
+            {
+                if(DFS(i, j, board, word, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+    bool DFS(int r, int c, vector<vector<char>>& board, string& word, int idx)
+    {
+        if(idx == word.size())
+            return true;
+        
+        if(r < 0 || r >= nR || c < 0 || c >= nC)
+            return false;
+
+        if(word[idx] != board[r][c])
+            return false;
+        
+        char temp = board[r][c];
+        board[r][c] = '*';
+        
+        for(auto dir : dirs)
+        {
+            int R = r + dir.first;
+            int C = c + dir.second;
+            
+            if(DFS(R, C, board, word, idx+1))
+                return true;
+        }
+        board[r][c] = temp;
+        return false;
+    }
+};
+
+// Alternate - Slower solution
 class Solution {
 public:
     bool exist(vector<vector<char>>& board, string word) {
@@ -67,7 +115,7 @@ public:
 };
 
 // ************************************************************************************************************
-// Alternate solution. Slower
+// Alternate solution. Slowest
 // ************************************************************************************************************
 class Solution {
 public:
