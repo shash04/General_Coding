@@ -13,7 +13,7 @@
 // https://leetcode.com/problems/longest-palindromic-substring/
 
 // ***********************************************************************************************************************
-// Expand around center approach - faster ()
+// Expand around center approach - faster
 // ***********************************************************************************************************************
 class Solution {
 public:
