@@ -20,6 +20,53 @@
 // 4) Connect all stored heads
 // FYI) dont forget to add the incomplete (size<k) at end of original list
 
+// **********************************************************************
+// Solution 1 : 
+// **********************************************************************
+
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode* temp = head;
+        
+        for(int i=0; i<k-1; i++)
+        {
+            if(temp == NULL)
+                return head;
+            temp = temp->next;
+        }
+        
+        if(temp == NULL)
+            return head;
+        
+        ListNode* nextHead = temp->next;
+        ListNode* revHead = reverse(head, k);
+        head->next = reverseKGroup(nextHead, k);
+        
+        return revHead;
+    }
+    
+    ListNode* reverse(ListNode* head, int k)
+    {
+        ListNode* curr = head;
+        ListNode* prev = NULL;
+        
+        while(k--)
+        {
+            ListNode* next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+        
+        return prev;
+    }
+};
+
+// **********************************************************************
+// Solution 2 :
+// **********************************************************************
+
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
