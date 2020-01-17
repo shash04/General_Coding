@@ -41,6 +41,9 @@
 
 // https://leetcode.com/problems/string-to-integer-atoi/
 
+// **************************************************************************************
+// Solution 1 - faster
+// **************************************************************************************
 class Solution {
 public:
     int myAtoi(string str) {
@@ -83,5 +86,48 @@ public:
             ans *= -1;
         
         return ans;
+    }
+};
+
+// **************************************************************************************
+// Solution 2 - slower
+// **************************************************************************************
+class Solution {
+public:
+    int myAtoi(string str) {
+        int len = str.length();
+        long ret = 0;
+        int sign = 1;
+        
+        int i=0;
+        int k=0;
+        while(str[i] == ' ' && i<len)
+            i++;
+        
+        if(str[i] == '+'){
+            sign = 1; i++;
+        }
+        else if(str[i] == '-'){
+            sign = -1; i++;
+        }
+        
+        if(!(str[i] >= '0' && str[i] <= '9'))
+            return 0;
+        
+        for(int j=i; j<len; j++)
+        {
+            if(!(str[j] >= '0' && str[j] <= '9'))
+                break;
+
+            ret = (ret * 10) + (str[j] - '0');
+            k++;
+
+            if(ret*sign < INT_MIN)
+                return INT_MIN;
+            if(ret*sign > INT_MAX)
+                return INT_MAX; 
+        }
+        ret = ret * sign;
+        return ret;
     }
 };
