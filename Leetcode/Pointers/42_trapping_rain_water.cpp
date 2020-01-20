@@ -9,9 +9,11 @@
 
 // https://leetcode.com/problems/trapping-rain-water/
 
+// **************************************************************************************
 // Concept : h1 - vector with max height while traversing left to right
 // h2 - vector with max height while traversing right to left
 // vol[i] = min(h1, h2) - height[i];
+// **************************************************************************************
 class Solution {
 public:
     int trap(vector<int>& height) {
@@ -38,6 +40,43 @@ public:
         {
             int validWaterHeight = min(h1[i], h2[i]);
             totalVol += validWaterHeight - height[i];
+        }
+        
+        return totalVol;
+    }
+};
+
+
+// **************************************************************************************
+// Alternate solution - Maintaining two pointers l and r. Keeping track of lMax and rMax
+// **************************************************************************************
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        if(!height.size())
+            return 0;
+      
+        int l = 0;
+        int r = height.size() - 1;
+
+        int lMax = height[l];
+        int rMax = height[r];
+        int totalVol = 0;
+        
+        while(l <= r)
+        {
+            if(lMax < rMax)
+            {
+                lMax = max(lMax, height[l]);
+                totalVol += lMax - height[l];
+                l++;
+            }
+            else
+            {
+                rMax = max(rMax, height[r]);
+                totalVol += rMax - height[r];
+                r--;
+            }
         }
         
         return totalVol;
