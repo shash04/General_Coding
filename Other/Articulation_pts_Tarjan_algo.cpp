@@ -18,22 +18,27 @@
 // 1 ≤ N, M ≤ 10
 // 0 ≤ X, Y ≤ N-1
 
+// https://www.hackerearth.com/practice/algorithms/graphs/articulation-points-and-bridges/tutorial/
+
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <bits/stdc++.h> 
 
 using namespace std;
 
+unordered_set<int> visitedNodes;
+vector<int> visitedTime;
+vector<int> parent;
+vector<int> lowTime;
+unordered_map<int, vector<int>> children;
+int timer;
+
 void DFS(unordered_map<int, vector<int>>& conMap,
-    int& timer,
     int currNode,
-    unordered_set<int>& visitedNodes,
-    vector<int>& visitedTime,
-    vector<int>& parent,
-    vector<int>& lowTime,
-    vector<int>& childCnt,
-    vector<int>& articulationPts)
+    vector<int>& articulationPts,
+    vector<vector<int>>& articulationLinks)
 {
     visitedNodes.insert(currNode);
     visitedTime[currNode] = timer;
@@ -52,13 +57,19 @@ void DFS(unordered_map<int, vector<int>>& conMap,
         if(visitedNodes.count(adj) == 0)
         {
             parent[adj] = currNode;
-            childCnt[currNode]++;
+            children[currNode].push_back(adj);
             
-            DFS(conMap, timer, adj, visitedNodes, visitedTime, parent, lowTime, childCnt, articulationPts);
+            DFS(conMap, adj, articulationPts, articulationLinks);
             
             if(visitedTime[currNode] <= lowTime[adj])
             {
                 isCurrArticulationPt = true;
+                
+                // If currNode is parent of adj and is the source of low time
+                if((visitedTime[currNode] < lowTime[adj]) && (parent[adj] == currNode))
+                {
+                    articulationLinks.push_back({currNode, adj});
+                }
             }
             else
             {
@@ -72,13 +83,13 @@ void DFS(unordered_map<int, vector<int>>& conMap,
         }
     }
     
-    if((parent[currNode] == -2 && childCnt[currNode] >= 2) || (parent[currNode] != -2 && isCurrArticulationPt))
+    if((parent[currNode] == -2 && children[currNode].size() >= 2) || (parent[currNode] != -2 && isCurrArticulationPt))
     {
         articulationPts.push_back(currNode);
     }
 }
 
-vector<int> findAllArticulationPoints(int n, vector<vector<int>> connections)
+void findAllArticulationPoints(int n, vector<vector<int>> connections, vector<int>& articulationPts, vector<vector<int>>& articulationLinks)
 {
     // Map for populating all connections
 	unordered_map<int, vector<int>> conMap;
@@ -89,26 +100,20 @@ vector<int> findAllArticulationPoints(int n, vector<vector<int>> connections)
        conMap[entry[1]].push_back(entry[0]);
     }
 	    
-    unordered_set<int> visitedNodes;
-    vector<int> visitedTime (n);
-    vector<int> parent (n, -2);
-    vector<int> lowTime (n);
-    vector<int> childCnt (n, 0);
-    int timer = 0;
-    
-    vector<int> articulationPts;
-    
-    DFS(conMap, timer, 0, visitedNodes, visitedTime, parent, lowTime, childCnt, articulationPts);
-    
-    return articulationPts;
+    visitedTime = vector<int> (n);
+    parent = vector<int> (n, -2);
+    lowTime = vector<int> (n);
+    timer = 0;
+
+    DFS(conMap, 0, articulationPts, articulationLinks);
 }
 
 int main() {
 	int N, M;
 	cin >> N;										    
-	cout << "Number of Vertices = " << N << endl;		
+// 	cout << "Number of Vertices = " << N << endl;		
 	cin >> M;										    
-	cout << "Number of Edges = " << M << endl;
+// 	cout << "Number of Edges = " << M << endl;
 	
 	vector<vector<int>> connections;
 
@@ -119,14 +124,27 @@ int main() {
 	    connections.push_back({a,b});
 	}
 	
-	vector<int> ans = findAllArticulationPoints(N, connections);
+    vector<int> articulationPts;
+    vector<vector<int>> articulationLinks;
+
+	findAllArticulationPoints(N, connections, articulationPts, articulationLinks);
 	
-	cout<<"All the articulations points in the graph/network are = "<<endl;
+	//cout<<"All the articulations points and links in the graph/network are = "<<endl;
 	
-	for(auto entry : ans)
+	sort(articulationPts.begin(), articulationPts.end());
+	sort(articulationLinks.begin(), articulationLinks.end());
+	
+	cout<<articulationPts.size()<<endl;
+	
+	for(auto entry : articulationPts)
 	    cout<<entry<<" ";
-	    
+
     cout<<endl;
+    
+    cout<<articulationLinks.size()<<endl;
+
+    for(auto entry : articulationLinks)
+	    cout<<entry[0]<<" "<<entry[1]<<endl;
 
     return 0;
 }
