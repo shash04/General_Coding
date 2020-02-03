@@ -69,54 +69,57 @@ public:
 };
 
 // *******************************************************************************************
-// Time Limit Exceeded
+// DFS approach
 // *******************************************************************************************
+
 class Solution {
 public:
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        if(numCourses == 0 || prerequisites.size() == 0)
-            return true;
+        vector<vector<int>> graph(numCourses);
         
-        unordered_map<int, unordered_set<int>> graph;
-        for(auto entry : prerequisites)
+        // Graph with key = course and val = all pre req courses
+        for(auto entry: prerequisites)
         {
-            graph[entry[0]].insert(entry[1]);
+            graph[entry[0]].push_back(entry[1]);
         }
         
-        vector<bool> visited (numCourses, false);
-        vector<bool> visiting (numCourses, false);
+        // visit status : 0 = not visited ; 1 = visiting ; 2 = visited
+        vector<int> visitStatus (numCourses,0);
         
-        for(auto v : graph)
+        for(int i=0; i < numCourses; i++)
         {
-            if(hasCycle(v.first , graph, visiting, visited))
+            if(!allFinishPossible(graph, visitStatus, i))
                 return false;
         }
         
         return true;
     }
     
-    bool hasCycle(int v, unordered_map<int, unordered_set<int>> graph, vector<bool>& visiting, vector<bool>& visited)
+    bool allFinishPossible(vector<vector<int>>& graph, vector<int>& visitStatus, int v)
     {
-        if(visited[v])
-            return false;
+        // If completely visited
+        if(visitStatus[v] == 2)
+            return true;
         
-        // Current vertex is marked as visiting
-        visiting[v] = true;
-        
-        // Explore all children for current vertex
-        for(auto nextV : graph[v])
+        // Explore all pre requisite courses for current course
+        for(auto i : graph[v])
         {
-            // Cycle found
-            if(visiting[nextV])
-                return true;
+            if(visitStatus[i] == 1)
+                return false;
             
-            if(hasCycle(nextV, graph, visiting, visited))
-                return true;
+            if(visitStatus[i] == 2)
+                continue;
+            
+            visitStatus[i] = 1;
+            
+            if(!allFinishPossible(graph, visitStatus, i))
+                return false;
+            
+            if(visitStatus[i] == 1)
+                visitStatus[i] = 0;
         }
         
-        visiting[v] = false;
-        visited[v] = true;
-        
-        return false;
+        visitStatus[v] = 2;
+        return true;
     }
 };
