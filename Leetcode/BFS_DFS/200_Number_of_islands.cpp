@@ -98,3 +98,52 @@ public:
         }
     }
 };
+
+// ****************************************************************************
+// Solution with use of dirs vector at top
+// ****************************************************************************
+class Solution {
+public:
+    vector<pair<int,int>> dirs = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    int nR, nC;
+    
+    int numIslands(vector<vector<char>>& grid) {
+        if(grid.size() == 0 || grid[0].size() == 0)
+            return 0;
+        
+        nR = grid.size();
+        nC = grid[0].size();
+        
+        int numIslands = 0;
+        
+        for(int i=0; i<nR; i++)
+        {
+            for(int j=0; j<nC; j++)
+            {
+                if(grid[i][j] == '1')
+                {
+                    numIslands++;
+                    DFS(grid, i, j);
+                }
+            }
+        }
+        
+        return numIslands;
+    }
+    
+    void DFS(vector<vector<char>>& grid, int& r, int& c)
+    {
+        grid[r][c] = '0';
+        
+        for(auto dir : dirs)
+        {
+            int R = r + dir.first;
+            int C = c + dir.second;
+            
+            if(R < 0 || R >= nR || C < 0 || C >= nC || grid[R][C] == '0')
+                continue;
+            
+            DFS(grid, R, C);
+        }
+    }
+};
