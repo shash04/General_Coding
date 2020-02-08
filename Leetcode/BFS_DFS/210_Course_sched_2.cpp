@@ -24,61 +24,45 @@
 class Solution {
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> graph(numCourses);
-        
-        // Graph with key = course and val = all pre req courses
-        for(auto entry: prerequisites)
-        {
-            graph[entry[0]].push_back(entry[1]);
-        }
-        
+        unordered_map<int, vector<int>> m1;
+        vector<int> visitStatus (numCourses, 0);
         vector<int> retVec;
         
-        // visit status : 0 = not visited ; 1 = visiting ; 2 = visited
-        vector<int> visitStatus (numCourses,0);
-        
-        for(int i=0; i < numCourses; i++)
+        for(auto entry : prerequisites)
         {
-            if(!canFinish(graph, visitStatus, i, retVec))
-                return {};
+            m1[entry[0]].push_back(entry[1]);
         }
         
-        // Add courses without any dependencies
-        for(int i=0; i < numCourses; i++)
+        for(int i=0; i<numCourses; i++)
         {
-            if(!visitStatus[i])
-                retVec.push_back(i);
+            if(!canFinish(m1, retVec, visitStatus, i))
+                return {};
         }
         
         return retVec;
     }
     
-    bool canFinish(vector<vector<int>>& graph, vector<int>& visitStatus, int v, vector<int>& retVec)
+    bool canFinish(unordered_map<int, vector<int>>& m1, vector<int>& retVec, vector<int>& visitStatus, int i )
     {
-        // If completely visited
-        if(visitStatus[v] == 2)
+        if(visitStatus[i] == 2)
             return true;
         
-        // Explore all pre requisite courses for current course
-        for(auto i : graph[v])
+        for(auto adj : m1[i])
         {
-            if(visitStatus[i] == 1)
+            if(visitStatus[adj] == 1)
                 return false;
             
-            if(visitStatus[i] == 2)
+            if(visitStatus[adj] == 2)
                 continue;
             
-            visitStatus[i] = 1;
+            visitStatus[adj] = 1;
             
-            if(!canFinish(graph, visitStatus, i, retVec))
+            if(!canFinish(m1, retVec, visitStatus, adj))
                 return false;
-            
-            if(visitStatus[i] == 1)
-                visitStatus[i] = 0;
         }
         
-        visitStatus[v] = 2;
-        retVec.push_back(v);
+        retVec.push_back(i);
+        visitStatus[i] = 2;
         return true;
     }
 };
