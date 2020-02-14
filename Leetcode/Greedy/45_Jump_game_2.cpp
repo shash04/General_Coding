@@ -19,33 +19,34 @@
 class Solution {
 public:
     int jump(vector<int>& nums) {
-        int n = nums.size();
-        int jumps = 0;
+        if(nums.size() < 2)
+            return 0;
         
-        int i=0;
+        int jumps = 0;
         int end = 0;
         int maxEnd = 0;
+        int i = 0;
         
-        while(end < n-1)
+        while(end < nums.size() - 1)
         {
             jumps++;
             for(; i<=end; i++)
             {
-                if(i + nums[i] >= n - 1)
-                    return jumps;
-                
                 maxEnd = max(maxEnd, i + nums[i]);
+                
+                if(maxEnd >= nums.size() - 1)
+                    return jumps;
             }
             
-            // this condition will be true if we can't reach end
+            // if you couldn't update the maxEnd => cannot reach last index
             if(end == maxEnd)
                 break;
             
             end = maxEnd;
         }
         
-        // if can't reach end => either nums has 1 entry or nums[i] = 0
-        return n == 1 ? 0 : -1;
+        // Couldn't reach last index
+        return -1;
     }
 };
 
