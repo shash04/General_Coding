@@ -30,6 +30,9 @@
 
 // https://leetcode.com/problems/jump-game-iii/
 
+// *********************************************************************
+// DFS approach
+// *********************************************************************
 class Solution {
 public:
     bool canReach(vector<int>& arr, int start) {
@@ -54,5 +57,50 @@ public:
             flag = DFS(arr, visited, rightIndex);
         
         return flag;
+    }
+};
+
+// *********************************************************************
+// BFS approach
+// *********************************************************************
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {
+        if(arr.size() == 0)
+            return false;
+        
+        return BFS(arr, start);
+    }
+    
+    bool BFS(vector<int>& arr, int& idx)
+    {
+        queue<int> q1;
+        q1.push(idx);
+        vector<bool> visited (arr.size(), false);
+        
+        while(!q1.empty())
+        {
+            int qSize = q1.size();
+            while(qSize--)
+            {
+                int currIdx = q1.front();
+                q1.pop();
+                
+                if(arr[currIdx] == 0)
+                    return true;
+                
+                visited[currIdx] = true;
+                
+                int nextIdx = currIdx + arr[currIdx];
+                int prevIdx = currIdx - arr[currIdx];
+                
+                if(nextIdx < arr.size() && !visited[nextIdx])
+                    q1.push(nextIdx);
+                
+                if(prevIdx >= 0 && !visited[prevIdx])
+                    q1.push(prevIdx);
+            }
+        }
+        return false;
     }
 };
