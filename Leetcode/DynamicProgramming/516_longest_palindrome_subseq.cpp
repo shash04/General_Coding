@@ -60,14 +60,14 @@ public:
             return 0;
         
         vector<vector<int>> dp (sLen, vector<int> (sLen, 0));
-        for(int i=0; i<sLen; i++)
+        for(int i=0; i < sLen; i++)
             dp[i][i] = 1;
         
         // subset size will vary from 2 to string length
-        for(int k=2; k<=sLen; k++)
+        for(int k=2; k <= sLen; k++)
         {
-            // Start of subset will vary from 0 to string length - subset size + 1
-            for(int i=0; i<sLen-k+1; i++)
+            // Start of subset will vary from [0, string_length - subset_size + 1)
+            for(int i=0; i < sLen-k+1; i++)
             {
                 // End of subset will be start + subset size - 1
                 int j = i + k - 1;
@@ -82,5 +82,41 @@ public:
         }
         
         return dp[0][sLen-1];
+    }
+};
+
+// #######################################################################################################################
+// Solution 3 : DP - same approach as longest common subsequesnce
+// #######################################################################################################################
+class Solution {
+public:
+    int longestPalindromeSubseq(string s) {
+        if(s.size() == 0)
+            return 0;
+        
+        string revStr = s;
+        reverse(revStr.begin(), revStr.end());
+        vector<vector<int>> dp (s.size() + 1, vector<int>(s.size() + 1, 0));
+        
+        return findLPS(s, revStr, dp);
+    }
+    
+    int findLPS(const string& s1, const string& s2, vector<vector<int>>& dp)
+    {
+        for(int i=0; i<s1.size(); i++)
+        {
+            for(int j=0; j<s2.size(); j++)
+            {
+                if(s1[i] == s2[j])
+                {
+                    dp[i+1][j+1] = 1 + dp[i][j];
+                }
+                else
+                {
+                    dp[i+1][j+1] = max(dp[i+1][j], dp[i][j+1]);
+                }
+            }
+        }
+        return dp[s1.size()][s2.size()];
     }
 };
