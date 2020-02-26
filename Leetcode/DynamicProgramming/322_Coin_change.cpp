@@ -18,16 +18,17 @@
 class Solution {
 public:
     int coinChange(vector<int>& coins, int amount) {
-        vector<int> v1 (amount + 1, amount + 1);
-        v1[0] = 0;
+        vector<int> dp (amount + 1, amount + 1);
+        
+        dp[0] = 0;                                          // zero coins required to make zero sum
         
         for(int coin : coins)                               // Iterate over all coins
         {
             for(int i=coin; i<=amount; i++)                 // Starting index is always higher than coin value
             {
-                v1[i] = min(v1[i], 1 + v1[i-coin]);         // min of (num of coins with earlier denomination, 1 + number of coins wihout current coin value)
+                dp[i] = min(dp[i], 1 + dp[i-coin]);         // min(num coins of prev value, 1 + num coins wihout current coin value)
             }
         }
-        return v1[amount] > amount ? -1 : v1[amount];
+        return dp[amount] > amount ? -1 : dp[amount];
     }
 };
