@@ -13,21 +13,29 @@
 // https://leetcode.com/problems/diameter-of-binary-tree/
 
 class Solution {
-public:
-    int DFS(TreeNode* root, int &longestPath) {
-        if(root == nullptr)
-            return 0;
-        
-        int leftLongestPath = DFS(root->left, longestPath);
-        int rightLongestPath = DFS(root->right, longestPath);
-        longestPath = max(leftLongestPath + rightLongestPath, longestPath);
-        return max(leftLongestPath + 1, rightLongestPath + 1);
-    }
-    
+public:    
     int diameterOfBinaryTree(TreeNode* root)
     {
         int longestPath = 0;
-        DFS(root, longestPath);
+        
+        findDiameter(root, longestPath);
+        
         return longestPath;
+    }
+    
+    int findDiameter(TreeNode* root, int &longestPath)
+    {
+        if(root == NULL)
+            return 0;
+        
+        // Calculate left and right longest paths
+        int leftLongestPath = findDiameter(root->left, longestPath);
+        int rightLongestPath = findDiameter(root->right, longestPath);
+        
+        // Add and update max
+        longestPath = max(leftLongestPath + rightLongestPath, longestPath);
+        
+        // Return the max of left and right longest paths + 1 (current node height)
+        return max(leftLongestPath + 1, rightLongestPath + 1);
     }
 };
