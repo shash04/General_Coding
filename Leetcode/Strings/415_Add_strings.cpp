@@ -17,88 +17,37 @@ public:
         if(num2.size() == 0)
             return num1;
         
+        string retStr;
+        
         int ptr1 = num1.size() - 1;
         int ptr2 = num2.size() - 1;
         
-        // retStr is big enough to hold sum
-        string retStr ( num1.size() + num2.size(), '0' );
-        int ptrSum = num1.size() + num2.size() - 1;
         int carry = 0;
         
-        // Add digits for both num1 and num2 valid
-        while(ptr1 >= 0 && ptr2 >= 0)
+        while(ptr1 >= 0 || ptr2 >= 0 || carry)
         {
-            int d1 = num1[ptr1] - '0';
-            int d2 = num2[ptr2] - '0';
+            int currSum = 0;
             
-            int currSum = d1 + d2 + carry;
-            
-            if(currSum >= 10)
+            if(ptr1 >= 0)
             {
-                carry = 1;
-                currSum = currSum %10;
-            }
-            else
-            {
-                carry = 0;
+                currSum += num1[ptr1] - '0';
+                ptr1--;
             }
             
-            retStr[ptrSum] = '0' + currSum;
-            ptr1--; ptr2--; ptrSum--;
+            if(ptr2 >= 0)
+            {
+                currSum += num2[ptr2] - '0';
+                ptr2--;
+            }
+            
+            currSum += carry;
+            carry   = currSum / 10;
+            currSum = currSum % 10;
+            
+            retStr += to_string(currSum);
         }
         
-        // Add remaining valid digits for num1
-        while(ptr1 >= 0)
-        {
-            int d1 = num1[ptr1] - '0';
-            int currSum = d1 + carry;
-  
-            if(currSum >= 10)
-            {
-                carry = 1;
-                currSum = currSum %10;
-            }
-            else
-            {
-                carry = 0;
-            }
-            
-            retStr[ptrSum] = '0' + currSum;
-            ptr1--; ptrSum--;
-        }
-        
-        // Add remaining valid digits for num2
-        while(ptr2 >= 0)
-        {
-            int d2 = num2[ptr2] - '0';
-            int currSum = d2 + carry;
-
-            if(currSum >= 10)
-            {
-                carry = 1;
-                currSum = currSum %10;
-            }
-            else
-            {
-                carry = 0;
-            }
-            
-            retStr[ptrSum] = '0' + currSum;
-            ptr2--; ptrSum--;
-        }
-        
-        // Check if carry is left to add
-        if(carry != 0)
-        {
-            retStr[ptrSum] = '0' + carry;
-        }
-        
-        // Remove all trailing zero. Return 0 if answer is 0
-        auto strBegin = retStr.find_first_not_of("0");
-        if (strBegin == string::npos)
-            return "0";
-        
-        retStr = retStr.substr(strBegin, retStr.size());
+        reverse(retStr.begin(), retStr.end());
         
         return retStr;
     }
