@@ -27,32 +27,34 @@
 class Solution {
 public:
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        // Important to sort candidates to avoid duplicates and target >= candidates[i] to work
         sort(candidates.begin(), candidates.end());
-        vector<int> combination;
-        vector<vector<int>> result;
         
-        getAllCombinations(candidates, target, combination, result, 0);
+        vector<vector<int>> retVec;
+        vector<int> currVec;
         
-        return result;
+        getCombinations(retVec, candidates, target, currVec, 0);
+        
+        return retVec;
     }
     
-    void getAllCombinations(vector<int>& candidates, int target, vector<int>& combination, vector<vector<int>>& result, int begin)
+    void getCombinations(vector<vector<int>>& retVec, vector<int>& candidates, int target, vector<int>& currVec, int currIdx)
     {
         if(target == 0)
         {
-            result.push_back(combination);
+            retVec.push_back(currVec);
             return;
         }
         
-        for (int i = begin; i != candidates.size() && target >= candidates[i]; ++i)
+        for(int i=currIdx; i < candidates.size() && target >= candidates[i]; i++)
         {
             // Conditions to avoid duplicates. For example 2 - avoid multiple [1,2,2]
-            if (i == begin || candidates[i] != candidates[i - 1])
-            {
-                combination.push_back(candidates[i]);
-                getAllCombinations(candidates, target - candidates[i], combination, result, i + 1);
-                combination.pop_back();
-            }
-        } 
+            if(i != currIdx && candidates[i] == candidates[i-1])
+                continue;
+            
+            currVec.push_back(candidates[i]);
+            getCombinations(retVec, candidates, target - candidates[i], currVec, i+1);
+            currVec.pop_back();
+        }
     }
 };
