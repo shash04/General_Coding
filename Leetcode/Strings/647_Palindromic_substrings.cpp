@@ -19,26 +19,27 @@
 class Solution {
 public:
     int countSubstrings(string s) {
-         int sLen = s.size();
-        if(sLen == 0)
+        if(s.size() == 0)
             return 0;
         
         int ans = 0;
         
-        for(int i=0; i<sLen; i++)
+        for(int i=0; i<s.size(); i++)
         {
-            for(int j=0; i-j >= 0 && i+j < sLen; j++)
+            for(int j=0; i-j >= 0 && i+j < s.size(); j++)
             {
-                if(s[i-j] != s[i+j])
+                if(s[i-j] == s[i+j])
+                    ans++;
+                else
                     break;
-                ans++;
             }
             
-            for(int j=0; i-j-1 >= 0 && i+j < sLen; j++)
+            for(int j=0; i-j >= 0 && i+j+1 < s.size(); j++)
             {
-                if(s[i-j-1] != s[i+j])
+                if(s[i-j] == s[i+j+1])
+                    ans++;
+                else
                     break;
-                ans++;
             }
         }
         
