@@ -18,6 +18,9 @@
 
 // https://leetcode.com/problems/subsets/
 
+// Could also be solved using iterative and bit manipulation approaches -
+// https://leetcode.com/problems/subsets/discuss/27278/C%2B%2B-RecursiveIterativeBit-Manipulation
+
 class Solution {
 public:
     vector<vector<int>> subsets(vector<int>& nums) {
