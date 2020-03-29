@@ -38,7 +38,7 @@ public:
                 k--;
             }
             
-            // currNum != '0' for avoiding leading zeros
+            // Avoiding leading zeros
             if(retStr.size() > 0 || currNum != '0')
                 retStr.push_back(currNum);
         }
