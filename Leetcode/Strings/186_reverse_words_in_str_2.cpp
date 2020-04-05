@@ -12,10 +12,49 @@
 
 // https://leetcode.com/problems/reverse-words-in-a-string-ii/
 
+// **********************************************************************************
+// Reverse orignal string and then reverse individual words
+// **********************************************************************************
+class Solution {
+public:
+    void reverseWords(vector<char>& s) {
+        if(s.size() == 0)
+            return;
+        
+        reverse(s.begin(), s.end());
+        
+        int start = 0;
+        int end = 0;
+        
+        while(end < s.size())
+        {
+            while(end < s.size() && s[end] != ' ')
+                end++;
+            
+            reverseWord(s, start, end-1);
+            
+            end++;
+            start = end;
+        }
+    }
+    
+    void reverseWord(vector<char>& s, int start, int end)
+    {
+        for(int i=0; i <= (end-start)/2; i++)
+        {
+            char temp = s[start + i];
+            s[start + i] = s[end - i];
+            s[end - i] = temp;
+        }
+    }
+};
+
+// **********************************************************************************
 // Concept - reverse the string
 // Iterate over the reversed string. Maintain two ptrs.
 // Find white space. Reverse the word in place. Carry on for loop from white space
 // Consider following example = "the sky is blue"
+// **********************************************************************************
 class Solution {
 public:
     void reverseWords(vector<char>& s) {
