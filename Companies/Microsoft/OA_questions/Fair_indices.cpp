@@ -54,7 +54,7 @@ int numFairIndices(const vector<int>& arrA, const vector<int>& arrB)
         sumA += arrA[i];
         sumB += arrB[i];
         
-        if((sumA == totalSumA / 2) && (sumB == totalSumB / 2) && (sumA == sumB))
+        if((sumA == totalSumA - sumA) && (sumB == totalSumB - sumB) && (sumA == sumB))
             numFairIndices++;
     }
     return numFairIndices;
