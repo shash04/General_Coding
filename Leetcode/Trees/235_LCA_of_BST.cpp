@@ -5,6 +5,33 @@
 
 // https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
 
+// ************************************************************************************
+// Non-recursive approach = p and q will be on one side of tree till common ancestor
+// ************************************************************************************
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == NULL)
+            return NULL;
+        
+        while(root)
+        {
+            if((p->val < root->val) && (q->val < root->val))
+                root = root->left;
+            else if((p->val > root->val) && (q->val > root->val))
+                root = root->right;
+            else
+                break;
+        }
+        
+        return root;
+    }
+};
+
+// ************************************************************************************
+// Classic approach = Populate vectors while finding nodes and reverse search common
+// ************************************************************************************
+
 class Solution {
 public:
     bool findNode(TreeNode* root, int num, vector<TreeNode*> &v)
