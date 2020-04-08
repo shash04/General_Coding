@@ -8,8 +8,9 @@
 class Solution {
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == nullptr)
-            return nullptr;
+        if(root == NULL)
+            return NULL;
+
         if(root->val == p->val || root->val == q->val)
             return root;
         
@@ -18,9 +19,10 @@ public:
         
         if(leftSearch && rightSearch)
             return root;
+
         else if(!leftSearch && !rightSearch)
             return NULL;
         
-        return leftSearch != nullptr ? leftSearch : rightSearch;
+        return leftSearch != NULL ? leftSearch : rightSearch;
     }
 };
