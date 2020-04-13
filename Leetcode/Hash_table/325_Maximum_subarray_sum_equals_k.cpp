@@ -21,6 +21,7 @@
 class Solution {
 public:
     int maxSubArrayLen(vector<int>& nums, int k) {
+        // key = sum (index 0 to curr index) ; value = curr index
         unordered_map<int, int> m1;
         int sum = 0;
         int maxLen = 0;
@@ -32,9 +33,12 @@ public:
             if(sum == k)
                 maxLen = i+1;
             
-            if(m1.find(sum) == m1.end())    // sum doesn't exist
+            // if sum not found before, add to map
+            if(m1.find(sum) == m1.end())
                 m1[sum] = i;
             
+            // if sum-k found before - sum between prev index and curr index is k
+            // take diff of curr index and prev index and compare with maxLen
             if(m1.find(sum-k) != m1.end())
                 maxLen = max(maxLen, i - m1[sum-k]);
         }
