@@ -5,43 +5,51 @@
 
 // https://leetcode.com/problems/linked-list-cycle-ii/
 
-// Solution: using two pointers, one of them one step at a time. another pointer each take two steps. Suppose the first 
-// meet at step k,the length of the Cycle is r. so..2k-k=nr,k=nr
-// Now, the distance between the start node of list and the start node of cycle is s. the distance between the start of list
-// and the first meeting node is k(the pointer which wake one step at a time waked k steps).the distance between the start
-// node of cycle and the first meeting node is m, so...s=k-m, s=nr-m=(n-1)r+(r-m),here we takes n = 1..so, using one pointer
-// start from the start node of list, another pointer start from the first meeting node, all of them wake one step at a time, 
-// the first time they meeting each other is the start of the cycle.
-
 class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
+        if(head == NULL)
+            return NULL;
+        
         ListNode* slow = head;
         ListNode* fast = head;
-        bool flag = false;
+        bool cyclePresent = false;
         
-        while(fast && fast->next)
+        while(fast != NULL && fast->next != NULL)
         {
-            
-            slow = slow->next;
             fast = fast->next->next;
+            slow = slow->next;
+            
             if(slow == fast)
             {
-                flag = true;
+                cyclePresent = true;
                 break;
             }
         }
-        if(!flag)
+        
+        if(!cyclePresent)
             return NULL;
-        else
+        
+        
+        // Let L1 = num nodes from head to start of cycle
+        // L2 = num nodes from start of cycle to meeting point of slow and fast
+        // C = num nodes in cycle
+        // As fast ptr has covered twice the distance as slow -
+        // 2(L1 + L2) = L1 + L2 + nC    ( n = number of cycles covered by fast ptr )
+        // L1 + L2 = nC
+        // L1 = nC - L2
+        // L1 = (n-1)C + (C - L2)
+        // Thus we need to start one ptr from head to cover L1 nodes and other ptr to
+        // conitnue for (C - L2) nodes. Then both the ptrs will reach the intersection node
+        
+        fast = head;
+        
+        while(fast != slow)
         {
-            fast = head;
-            while(slow != fast)
-            {
-                slow = slow->next;
-                fast = fast->next;
-            }
-        }            
-        return slow;        
+            slow = slow->next;
+            fast = fast->next;
+        }
+        
+        return fast;
     }
 };
