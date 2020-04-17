@@ -45,7 +45,7 @@ public:
                     while(start < end && nums[start] == v1[1])      // Avoid duplicates for curr start num
                         start++;
                     
-                    while(start < end && nums[end] == v1[2])        // Avoid duplicates for curr end num
+                    while(end > start && nums[end] == v1[2])        // Avoid duplicates for curr end num
                         end--;
                 }
             }
