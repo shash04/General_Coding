@@ -40,6 +40,27 @@ int countNumShines(const vector<int>& arr)
     return ans;
 }
 
+/*
+Faster way to do same thing - 
+
+int countNumShines(const vector<int>& light)
+{
+    int numTimes = 0;
+    int rightMostLitBulb = 0;
+
+    for(int i=0; i < light.size(); i++)
+    {
+        rightMostLitBulb = max(rightMostLitBulb, light[i]);
+
+        if(rightMostLitBulb == i+1)
+            numTimes++;
+    }
+
+    return numTimes;
+}
+
+*/
+
 int main() {
     vector<int> arr1 = {2,1,3,4,5};
     vector<int> arr2 = {2,3,4,1,5};
