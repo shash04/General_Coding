@@ -17,6 +17,61 @@
 
 // https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal/
 
+// ********************************************************************************
+// Queue approach with normal traversal and reversing vector for alternate dirs
+// ********************************************************************************
+
+#define RIGHTDIR 0
+#define LEFTDIR 1
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> retVec;
+        
+        if(root == NULL)
+            return retVec;
+        
+        queue<TreeNode*> q1;
+        int dir = LEFTDIR;
+        
+        q1.push(root);
+        
+        while(!q1.empty())
+        {
+            vector<int> currVec;
+            int currQSize = q1.size();
+            
+            while(currQSize--)
+            {
+                TreeNode* currNode = q1.front();
+                currVec.push_back(currNode->val);
+                q1.pop();
+                
+                if(currNode->left) q1.push(currNode->left);
+                if(currNode->right) q1.push(currNode->right);
+            }
+            
+            if(dir == LEFTDIR)
+            {
+                retVec.push_back(currVec);
+                dir = RIGHTDIR;
+            }
+            else
+            {
+                reverse(currVec.begin(), currVec.end());
+                retVec.push_back(currVec);
+                dir = LEFTDIR;
+            }
+        }
+        
+        return retVec;
+    }
+};
+
+// ********************************************************************************
+// Two stack approach
+// ********************************************************************************
 class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
@@ -57,35 +112,5 @@ public:
         }
         
         return vec;
-    }
-};
-
-// Optimal time solution
-class Solution {
-public:
-    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-        vector<vector<int>> res;
-        if (root == NULL) return res;
-        queue<TreeNode*> q;
-        q.push(root);
-        
-        bool forward = false;
-        while (!q.empty()) {
-            int size = q.size();
-            forward = !forward;
-            vector<int> vec;
-            while (size) {
-                TreeNode *t = q.front();
-                q.pop();
-                vec.push_back(t->val);
-                if (t->left) q.push(t->left);
-                if (t->right) q.push(t->right);
-                size--;
-            }
-            if (!forward) reverse(vec.begin(), vec.end());
-            res.push_back(vec);
-        }
-        
-        return res;
     }
 };
