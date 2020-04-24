@@ -29,6 +29,9 @@
 
 // https://leetcode.com/problems/sort-characters-by-frequency/
 
+// ***************************************************************************************
+// Priority Queue Approach
+// ***************************************************************************************
 class SortByVal{
 public:
     bool operator()(pair<char, int>& a, pair<char, int>& b)
@@ -65,6 +68,45 @@ public:
             for(int i=0; i<pq_entry.second; i++)
             {
                 retStr += pq_entry.first;
+            }
+        }
+        
+        return retStr;
+    }
+};
+
+// ***************************************************************************************
+// Alternate approach with multiple data structures
+// ***************************************************************************************
+class Solution {
+public:
+    string frequencySort(string s) {
+        unordered_map<char, int> m1;
+        unordered_map<int, vector<char>> m2;
+        vector<int> freq;
+        string retStr;
+        
+        for(char& c : s)
+            m1[c]++;
+        
+        for(auto& entry : m1)
+        {
+            if(m2.find(entry.second) == m2.end())
+                freq.push_back(entry.second);
+            
+            m2[entry.second].push_back(entry.first);   
+        }
+        
+        sort(freq.begin(), freq.end(), greater<int>());
+        
+        for(int& f : freq)
+        {
+            vector<char> currCharVec = m2[f];
+            
+            for(char& c : currCharVec)
+            {
+                for(int i=0; i < f; i++)
+                    retStr += c;
             }
         }
         
