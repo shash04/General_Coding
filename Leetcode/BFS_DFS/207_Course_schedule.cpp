@@ -107,7 +107,7 @@ public:
             if(visitStatus[i] == 1)
                 return false;
             
-            // This condition is not necessary but increases performance
+            // This condition helps avoid visited nodes while doing dfs
             if(visitStatus[i] == 2)
                 continue;
             
