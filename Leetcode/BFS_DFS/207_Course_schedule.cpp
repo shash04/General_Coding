@@ -107,18 +107,18 @@ public:
             if(visitStatus[i] == 1)
                 return false;
             
+            // This condition is not necessary but increases performance
             if(visitStatus[i] == 2)
                 continue;
             
+            // Mark the current node as visiting
             visitStatus[i] = 1;
             
             if(!allFinishPossible(graph, visitStatus, i))
                 return false;
-            
-            if(visitStatus[i] == 1)
-                visitStatus[i] = 0;
         }
         
+        // Mark the current node as visited only after traversing all the dependencies
         visitStatus[v] = 2;
         return true;
     }
