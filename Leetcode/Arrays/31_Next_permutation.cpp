@@ -16,6 +16,46 @@
 // between num[i,n-1] that is larger than num[i-1]. For example, original number is 121543321, we want to swap the '1' at position 2 with '2' at position 7.
 // Step 3 = The last step is to make the remaining higher position part as small as possible, we just have to reversely sort the num[i,n-1]
 
+// **********************************************************************************
+// Refactored code
+// **********************************************************************************
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
+        int index = 0;
+    
+        for(int i=nums.size() - 1; i > 0; i--)
+        {
+            if(nums[i] > nums[i-1])
+            {
+                index = i;
+                break;
+            }
+        }
+        
+        if(index == 0)
+        {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+        
+        for(int i=nums.size() - 1; i >= index; i--)
+        {
+            if(nums[i] > nums[index-1])
+            {
+                swap(nums[i], nums[index-1]);
+                break;
+            }
+        }
+        
+        reverse(nums.begin() + index, nums.end());
+    }
+};
+
+// **********************************************************************************
+// Original code
+// **********************************************************************************
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
