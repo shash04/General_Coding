@@ -32,36 +32,47 @@ class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
         unordered_set<string> dict (wordList.begin(), wordList.end());
-        queue<string> q1;                                   // Queue to maintain neighbors for BFS
-        int ladderLen = 1;                                  // Init to 1 as beginWord is counted
+        
+        if(dict.count(endWord) == 0)
+            return 0;
+
+        queue<string> q1;                                           // Queue to maintain neighbors for BFS
+
+        int ladderLen = 1;                                          // Init to 1 as beginWord is counted
+
         q1.push(beginWord);
+
         while(!q1.empty())
         {
-            int currNeighbors = q1.size();
-            for(int i=0; i<currNeighbors; i++)              // Iterate over all current neighbors to check if endWord reached
+            int qSize = q1.size();
+
+            while(qSize--)                                          // Iterate over all current neighbors to check if endWord reached
             {
-                string word = q1.front();
+                string currWord = q1.front();
                 q1.pop();
                 
-                if(word == endWord)
+                if(currWord == endWord)
                     return ladderLen;
                 
-                dict.erase(word);                           // Current word in used. So removing from dict
-                
-                for(int j=0; j<word.size(); j++)            // Change every char in curr word and create all possible combinations
+                for(int j=0; j < currWord.size(); j++)              // Change every char in curr word and create all possible combinations
                 {
-                    char c_temp = word[j];
+                    char tempChar = currWord[j];
                     for(char c = 'a'; c <= 'z'; c++)
                     {
-                        word[j] = c;
-                        if(dict.find(word) != dict.end())   // If combination/neighbor is present in dict => add it to queue
-                            q1.push(word);
+                        currWord[j] = c;
+
+                        if(dict.count(currWord))                    // If combination/neighbor is present in dict => add it to queue
+                        {
+                            q1.push(currWord);
+                            dict.erase(currWord);                   // Current word in used. So removing from dict
+                        }
                     }
-                    word[j] = c_temp;
+                    currWord[j] = tempChar;
                 }
             }
-            ladderLen++;                                    // Increment ladderLen as we are past one word in dict
+            ladderLen++;                                            // Increment ladderLen as we are past one word in dict
         }
+
         return 0;
     }
 };
