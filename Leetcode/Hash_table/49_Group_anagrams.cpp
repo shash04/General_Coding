@@ -31,3 +31,45 @@ public:
         return retVec;
     }
 };
+
+
+// ********************************************************************
+// Alternate method
+// ********************************************************************
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        vector<vector<string>> retVec;
+        
+        unordered_map<string, vector<string>> anagramMap;
+        
+        for(int i=0; i < strs.size(); i++)
+        {
+            string hashKey = getHashKey(strs[i]);
+            anagramMap[hashKey].push_back(strs[i]);
+        }
+        
+        for(auto& entry : anagramMap)
+            retVec.push_back(entry.second);
+        
+        return retVec;
+    }
+    
+    string getHashKey(string& s)
+    {
+        string hashKey;
+        
+        // Using map as the char entries will always be sorted
+        map<char, int> m1;
+        
+        for(char& c : s)
+            m1[c]++;
+        
+        for(auto& entry : m1)
+        {
+            hashKey += entry.first + to_string(entry.second);
+        }
+        
+        return hashKey;
+    }
+};
