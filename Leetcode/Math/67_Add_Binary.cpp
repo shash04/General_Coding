@@ -20,6 +20,44 @@
 
 // https://leetcode.com/problems/add-binary/
 
+// ******************************************************************
+// Calculate sum and carru for every iteration
+// ******************************************************************
+
+#define myStoi(c) (c - '0')
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        string sumAns;
+        
+        int lenA = a.size();
+        int lenB = b.size();
+        
+        int idxA = lenA - 1, idxB = lenB - 1;
+        int carry = 0;
+        int sum = 0;
+        
+        while(idxA >= 0 || idxB >= 0 || carry > 0)
+        {
+            int A = (idxA >= 0) ? myStoi(a[idxA--]) : 0;
+            int B = (idxB >= 0) ? myStoi(b[idxB--]) : 0;
+            
+            sum = A + B + carry;
+            
+            sumAns = char(sum % 2 + '0') + sumAns;
+            
+            carry = sum / 2;
+        }
+        
+        return sumAns;
+    }
+};
+
+// ******************************************************************
+// Using Logic for Full adder 
+// ******************************************************************
+
 #define stoi(c) (c - '0')
 
 class Solution {
