@@ -79,7 +79,7 @@ public:
 
 class Solution {
 private:
-map<pair<int, int>, bool> cache;
+      map<pair<int, int>, bool> cache;
     
 public:    
     int findCelebrity(int n) {
