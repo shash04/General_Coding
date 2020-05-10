@@ -79,7 +79,16 @@ public:
 
 class Solution {
 private:
-      map<pair<int, int>, bool> cache;
+    map<pair<int, int>, bool> cache;
+
+    // ***** Override knows API for storing the results in cache *****   
+    bool knowsCache(int a, int b)
+    {
+        if(!cache.count({a, b}))
+            cache[{a, b}] = knows(a, b);
+        
+        return cache[{a, b}];
+    }
     
 public:    
     int findCelebrity(int n) {
@@ -105,15 +114,5 @@ public:
         }
         
         return currCelebrity;
-    }
-    
-    // ***** Override knows API for storing the results in cache *****
-    
-    bool knowsCache(int a, int b)
-    {
-        if(!cache.count({a, b}))
-            cache[{a, b}] = knows(a, b);
-        
-        return cache[{a, b}];
     }
 };
