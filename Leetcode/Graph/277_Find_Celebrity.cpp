@@ -67,3 +67,53 @@ public:
         return currCelebrity;
     }
 };
+
+// ***************************************************************************************************
+// Follow up interview question to store the results of API call in cache
+// The result of API calls in first iteration can be used in second iteration to optimize run time
+// Earlier the probable candidate is found in first iteration, more repetative calls in second iter
+// ***************************************************************************************************
+
+/* The knows API is defined for you.
+      bool knows(int a, int b); */
+
+class Solution {
+private:
+map<pair<int, int>, bool> cache;
+    
+public:    
+    int findCelebrity(int n) {
+        int currCelebrity = 0;
+        
+        // First iteration to find probable celebrity
+        for(int i=0; i < n; i++)
+        {
+            if(knowsCache(currCelebrity, i))
+                currCelebrity = i;
+        }
+        
+        // Second iteration to verify probabe celebrity satisfies all conditions
+        for(int i=0; i < n; i++)
+        {
+            if(i == currCelebrity)
+                continue;
+            
+            // Celebrity shouldn't know anyone else and everyone should know celebrity
+            // Return -1 if this isn't true
+            if(knowsCache(currCelebrity, i) || !knowsCache(i, currCelebrity))
+                return -1;
+        }
+        
+        return currCelebrity;
+    }
+    
+    // ***** Override knows API for storing the results in cache *****
+    
+    bool knowsCache(int a, int b)
+    {
+        if(!cache.count({a, b}))
+            cache[{a, b}] = knows(a, b);
+        
+        return cache[{a, b}];
+    }
+};
