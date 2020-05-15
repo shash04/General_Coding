@@ -31,39 +31,47 @@
 class Solution {
 public:
     bool isMatch(string s, string p) {
-        int sLen = s.length();
-        int pLen = p.length();
+        int sLen = s.size();
+        int pLen = p.size();
         
-        bool T[sLen+1][pLen+1];
-        for(int i=0; i<sLen+1; i++)
-        {
-            for(int j=0; j<pLen+1; j++)
-                T[i][j] = false;
-        }
-        T[0][0] = true;
+        vector<vector<int>> dp (sLen + 1, vector<int>(pLen + 1, false));
         
-        for(int j=1; j<pLen+1; j++)         // Deals with patterns like a* or a*b* or a*b*c*
+        // Empty string and empty pattern match
+        dp[0][0] = true;
+        
+        // If patter has '*', consider zero occurences of prev char in p.
+        // Thus get dp value from j-2
+        for(int j=1; j <= pLen; j++)
         {
             if(p[j-1] == '*')
-                T[0][j] = T[0][j-2];
+                dp[0][j] = dp[0][j-2];
         }
         
-        for(int i=1; i<sLen+1; i++)
+        for(int i=1; i <= sLen; i++)
         {
-            for(int j=1; j<pLen+1; j++)
+            for(int j=1; j <= pLen; j++)
             {
-                if(p[j-1]==s[i-1] || p[j-1] == '.')
-                    T[i][j] = T[i-1][j-1];
+                // Case 1 - If curr char in s matches with curr char in p OR curr char in p is '.'
+                if(s[i-1] == p[j-1] || p[j-1] == '.')
+                    dp[i][j] = dp[i-1][j-1];
+                
                 else if(p[j-1] == '*')
                 {
-                    T[i][j] = T[i][j-2];
-                    if(p[j-2]=='.' || p[j-2]==s[i-1])
-                        T[i][j] |= T[i-1][j];
+                    // Case 2.a - zero occurences of prev char in p
+                    dp[i][j] = dp[i][j-2];
+                    
+                    // Case 2.b - multiple occurences of prev char in p
+                    // e.g p = ab* and s = abb
+                    // remove b from s and check if ab* matches with ab -> dp[i-1][j]
+                    if(p[j-2] == '.' || s[i-1] == p[j-2])
+                        dp[i][j] |= dp[i-1][j];
                 }
                 else
-                    T[i][j] = false;
+                {
+                    dp[i][j] = false;
+                }
             }
         }
-        return T[sLen][pLen];
+        return dp[sLen][pLen];
     }
 };
