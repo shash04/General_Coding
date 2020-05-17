@@ -10,18 +10,17 @@
 class Solution {
 public:
     bool isValidBST(TreeNode* root) {
-        return isValidBSTUtil(root, NULL, NULL);
+        return isValidBstHelper(root, NULL, NULL);
     }
     
-    bool isValidBSTUtil(TreeNode* root, TreeNode* minNode, TreeNode* maxNode)
+    bool isValidBstHelper(TreeNode* root, TreeNode* minNode, TreeNode* maxNode)
     {
-        if(root == nullptr)
+        if(root == NULL)
             return true;
-        else if((minNode && minNode->val >= root->val) ||
-                (maxNode && maxNode->val <= root->val))
+        
+        else if((minNode && minNode->val >= root->val) || (maxNode && maxNode->val <= root->val))
             return false;
-        return (
-           isValidBSTUtil(root->right, root, maxNode) &&
-           isValidBSTUtil(root->left, minNode, root) );
+        
+        return isValidBstHelper(root->left, minNode, root) && isValidBstHelper(root->right, root, maxNode);
     }
 };
