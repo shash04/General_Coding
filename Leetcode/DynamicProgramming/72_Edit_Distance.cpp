@@ -25,36 +25,37 @@
 
 // https://leetcode.com/problems/edit-distance/
 
-class Solution
-{
+class Solution {
 public:
-    int minDistance(string word1, string word2)
-    {
-        int m = word1.size();
-        int n = word2.size();
-
-        int T[m + 1][n + 1] = {0};
-
+    int minDistance(string word1, string word2) {
+        int w1Size = word1.size();
+        int w2Size = word2.size();
+        
+        vector<vector<int>> dp (w1Size + 1, vector<int>(w2Size + 1, 0));
+        
         // Populate first row and column assuming empty strings.
         // So all the characters till curr char have to be replaced
-        for (int i = 0; i <= m; i++)
-            T[i][0] = i;
-        for (int j = 0; j <= n; j++)
-            T[0][j] = j;
-
-        // Case 1: If char from word1 == char from word2 = take diagonally previous value T[i-1][j-1]
-        // Case 2: Else minimum of 3 previous adjacent values + 1
-        for (int j = 1; j <= n; j++)
+        for(int i=0; i <= w1Size; i++)
+            dp[i][0] = i;
+        
+        for(int j=0; j <= w2Size; j++)
+            dp[0][j] = j;
+        
+        
+        for(int i=1; i <= w1Size; i++)
         {
-            for (int i = 1; i <= m; i++)
+            for(int j=1; j <= w2Size; j++)
             {
-                if (word1[i - 1] == word2[j - 1])
-                    T[i][j] = T[i - 1][j - 1];
+                // Case 1: If char from word1 == char from word2 : take diagonally previous value dp[i-1][j-1]
+                if(word1[i-1] == word2[j-1])
+                    dp[i][j] = dp[i-1][j-1];
+                
+                // Case 2: If chars don't match minimum of 3 previous adjacent values + 1
                 else
-                    T[i][j] = min(min(T[i - 1][j], T[i][j - 1]), T[i - 1][j - 1]) + 1;
+                    dp[i][j] = 1 + min(dp[i-1][j], min(dp[i-1][j-1], dp[i][j-1]));
             }
         }
-
-        return T[m][n];
+        
+        return dp[w1Size][w2Size];
     }
 };
