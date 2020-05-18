@@ -25,6 +25,51 @@
 
 // https://leetcode.com/problems/edit-distance/
 
+// **************************************************************************************************
+// Space optimal solution 
+// **************************************************************************************************
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int w1Size = word1.size();
+        int w2Size = word2.size();
+        
+        vector<int> dp (w2Size + 1, 0);
+        
+        for(int j=1; j <= w2Size; j++)
+            dp[j] = j;
+        
+        for(int i=1; i <= w1Size; i++)
+        {
+            // pre keeps track of diagonally opp prev element dp[i-1][j-1]
+            // for every row, initial value is prev i. Thus get dp[0] and update dp[0] for next iter
+            int pre = dp[0];
+            dp[0] = i;
+            
+            for(int j=1; j <= w2Size; j++)
+            {
+                // Store curr col val (dp[j]) as it will be used for updating pre
+                // (diagonally opp for next iteration)
+                int temp = dp[j];
+                
+                if(word1[i-1] == word2[j-1])
+                    dp[j] = pre;
+                
+                else
+                    dp[j] = 1 + min(pre, min(dp[j], dp[j-1]));
+                
+                pre = temp;
+            }
+        }
+        
+        return dp[w2Size];
+    }
+};
+
+// **************************************************************************************************
+// 2-D DP approach
+// **************************************************************************************************
+
 class Solution {
 public:
     int minDistance(string word1, string word2) {
