@@ -10,45 +10,48 @@
 // https://leetcode.com/problems/trapping-rain-water/
 
 // **************************************************************************************
-// Concept : h1 - vector with max height while traversing left to right
-// h2 - vector with max height while traversing right to left
-// vol[i] = min(h1, h2) - height[i];
+// Concept : leftMaxHeight - vector with max height while traversing left to right
+// rightMaxHeight - vector with max height while traversing right to left
+// totalWater += min(leftMaxHeight[i], rightMaxHeight[i]) - height[i];
+// Time Complexity - O(N)
+// Space Complexity - O(N)
 // **************************************************************************************
 class Solution {
 public:
     int trap(vector<int>& height) {
-        int n = height.size();
-        if(n == 0)
+        if(height.size() == 0)
             return 0;
         
-        vector<int> h1(n), h2(n);
-        int totalVol = 0;
+        int totalWater = 0;
+        int n = height.size();
         
-        int iter1_max = 0;
-        int iter2_max = 0;
+        // left and right vec for indicating max height till index from left and right
+        vector<int> leftMaxHeight (n, 0);
+        vector<int> rightMaxHeight (n, 0);
         
-        for(int i=0; i<n; i++)
+        // initialize the max height
+        leftMaxHeight[0] = height[0];
+        rightMaxHeight[n-1] = height[n-1];
+        
+        for(int i=1; i < n; i++)
+            leftMaxHeight[i] = max(leftMaxHeight[i-1], height[i]);
+        
+        for(int i=n-2; i >= 0; i--)
+            rightMaxHeight[i] = max(rightMaxHeight[i+1], height[i]);
+        
+        for(int i=0; i < n; i++)
         {
-            iter1_max = max(height[i], iter1_max);
-            iter2_max = max(height[n-1-i], iter2_max);
-            
-            h1[i] = iter1_max;
-            h2[n-1-i] = iter2_max;
+            totalWater += min(leftMaxHeight[i], rightMaxHeight[i]) - height[i];
         }
         
-        for(int i=0; i<n; i++)
-        {
-            int validWaterHeight = min(h1[i], h2[i]);
-            totalVol += validWaterHeight - height[i];
-        }
-        
-        return totalVol;
+        return totalWater;
     }
 };
 
-
 // **************************************************************************************
 // Alternate solution - Maintaining two pointers l and r. Keeping track of lMax and rMax
+// Time Complexity - O(N)
+// Space Complexity - O(1)
 // **************************************************************************************
 class Solution {
 public:
