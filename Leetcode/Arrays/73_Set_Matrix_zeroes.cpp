@@ -35,6 +35,51 @@
 
 // https://leetcode.com/problems/set-matrix-zeroes/
 
+// ***********************************************************************************
+// Space complexity - O(1)
+// ***********************************************************************************
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        if(matrix.size() == 0 | matrix[0].size() == 0)
+            return;
+        
+        bool col0 = false;
+        int nR = matrix.size();
+        int nC = matrix[0].size();
+        
+        // keep track of zero row and col in first ele in row and col
+        // special flag for first col to avoid overwriting actual 0 info for 0,0
+        for(int i=0; i < nR; i++)
+        {
+            if(matrix[i][0] == 0)
+                col0 = true;
+            
+            for(int j = 1; j < nC; j++)
+            {
+                if(matrix[i][j] == 0)
+                    matrix[i][0] = matrix[0][j] = 0;
+            }
+        }
+        
+        // important to go from end to begin to avoid overwriting first row and col
+        for(int i=nR-1; i >= 0; i--)
+        {
+            for(int j=nC-1; j >= 1; j--)
+            {
+                if(matrix[i][0] == 0 || matrix[0][j] == 0)
+                    matrix[i][j] = 0;
+            }
+            
+            if(col0 == true)
+                matrix[i][0] = 0;
+        }
+    }
+};
+
+// ***********************************************************************************
+// Space complexity - O(m + n)
+// ***********************************************************************************
 class Solution {
     int nR;
     int nC;
