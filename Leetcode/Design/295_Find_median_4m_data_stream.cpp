@@ -23,6 +23,13 @@
 
 // https://leetcode.com/problems/find-median-from-data-stream/
 
+// ******************************************************************************************
+// Max Heap and Min Heap approach
+// Max Heap keeps lower half of stream (left half)
+// Min heap keeps upper half of stream (right half)
+// Max heap has preferrence = thus for odd num of elements - top of left would be median
+// ******************************************************************************************
+
 class MedianFinder {
 private:
     priority_queue<int> left;                                    // Max Heap
@@ -59,3 +66,65 @@ public:
  * obj->addNum(num);
  * double param_2 = obj->findMedian();
  */
+
+
+// ******************************************************************************************
+// Alternate approach with multiset
+// ******************************************************************************************
+class MedianFinder {
+private:
+    multiset<int> ms;
+    multiset<int>::iterator loPtr, hiPtr;
+public:
+    /** initialize your data structure here. */
+    MedianFinder() {
+        loPtr = ms.end();
+        hiPtr = ms.end();
+    }
+    
+    void addNum(int num) {
+        int msSize = ms.size();
+        
+        ms.insert(num);
+        
+        if(msSize == 0)
+        {
+            loPtr = hiPtr = ms.begin();
+        }
+        // Multiset has odd number of elements - lo and hi ptrs point to same median
+        else if(msSize % 2 == 1)
+        {
+            int currMedian = *loPtr;
+            
+            // if num is less that curr median it would be add to lower half - decrement loPtr
+            // else increment hiPtr
+            if(num < currMedian)
+                loPtr--;
+            else
+                hiPtr++;
+        }
+        // Multiset has even number of elements - lo and hi ptrs point to consecutive ele
+        else
+        {
+            int loMedian = *loPtr;
+            int hiMedian = *hiPtr;
+            
+            if(num > loMedian && num < hiMedian)
+            {
+                loPtr++;
+                hiPtr--;
+            }
+            else if(num >= hiMedian)
+                loPtr++;
+            else
+                loPtr = --hiPtr;                // Insertion at end of equal range would spoil loPtr
+        }
+    }
+    
+    double findMedian() {
+        if(ms.size() % 2)
+            return *loPtr;
+        else
+            return (double)(*loPtr + *hiPtr) * 0.5;
+    }
+};
