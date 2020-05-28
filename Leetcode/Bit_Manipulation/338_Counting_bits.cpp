@@ -17,6 +17,32 @@
 
 // https://leetcode.com/problems/counting-bits/
 
+// ***********************************************************************************
+// update dp vec by getting the number of bits in num >> 1 and
+// checking if the last bit was 1 or 0
+// Time complexity = 0(N)
+// ***********************************************************************************
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> dp (num + 1, 0);
+        
+        // Concept : update dp vec by getting the number of bits in num >> 1 and
+        // checking if the last bit was 1 or 0
+        for(int i=1; i <= num; i++)
+        {
+            dp[i] = dp[i >> 1] + (i & 1);
+        }
+        
+        return dp;
+    }
+};
+
+// ***********************************************************************************
+// Use function to count set bits for every num
+// Time complexity = 0(N * K) where K = set bits
+// ***********************************************************************************
+
 class Solution {
 public:
     vector<int> countBits(int num) {
