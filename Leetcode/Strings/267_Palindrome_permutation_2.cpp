@@ -1,4 +1,5 @@
-// Given a string s, return all the palindromic permutations (without duplicates) of it. Return an empty list if no palindromic permutation could be form.
+// Given a string s, return all the palindromic permutations (without duplicates) of it.
+// Return an empty list if no palindromic permutation could be form.
 
 // Example 1:
 // Input: "aabb"
@@ -10,9 +11,75 @@
 
 // https://leetcode.com/problems/palindrome-permutation-ii/
 
+// ************************************************************************************
+// Logic : Use hash map to keep track of count of chars
+// Divide the count by 2 for every char
+// Maintain mid string for odd len case
+// use backtracking method to generate permutations
+// ************************************************************************************
+class Solution {
+    unordered_map<char, int> charMap;
+    
+    void backtrack(string currStr, int halfLen, string& mid, vector<string>& retVec)
+    {
+        if(currStr.size() == halfLen)
+        {
+            string rev = currStr;
+            reverse(rev.begin(), rev.end());
+            retVec.push_back(currStr + mid + rev);
+            return;
+        }
+        
+        for(auto& entry : charMap)
+        {
+            if(entry.second > 0)
+            {
+                entry.second--;
+                backtrack(currStr + entry.first, halfLen, mid, retVec);
+                entry.second++;
+            }
+        }
+    }
+    
+public:
+    vector<string> generatePalindromes(string s) {
+        if(s.size() == 0)
+            return {};
+        
+        vector<string> retVec;
+        int oddCount = 0;
+        string mid = "";
+        int halfLen = 0;
+        
+        for(char& c : s)
+            charMap[c]++;
+        
+        for(auto& entry : charMap)
+        {
+            if(entry.second % 2)
+            {
+                oddCount++;
+                mid = entry.first;
+            }
+            
+            entry.second /= 2;
+            halfLen += entry.second;
+        }
+        
+        if(oddCount > 1)
+            return retVec;
+        
+        backtrack("", halfLen, mid, retVec);
+        
+        return retVec;
+    }
+};
+
+// ************************************************************************************
 // Logic: Create a map to register count of chars. Odd count char would be in middle
 // Create first half of palindrome string as second half would be just reverse of it
 // Use next_permutation function to get all permutations of first half
+// ************************************************************************************
 class Solution {
 public:
     vector<string> generatePalindromes(string s) {
