@@ -20,66 +20,51 @@
 // 3 <= logs[i].length <= 100
 // logs[i] is guaranteed to have an identifier, and a word after the identifier.
 
+// https://leetcode.com/problems/reorder-data-in-log-files/
+
 class Solution {
+    static bool mySort(pair<string, string>& a, pair<string, string>& b)
+    {
+        if(a.second != b.second)
+            return a.second < b.second;
+        
+        return a.first < b.first;
+    }
 public:
     vector<string> reorderLogFiles(vector<string>& logs) {
-        if(logs.size() == 0)
-            return logs;
+        vector<string> retVec;
         
-        vector<string> letLogs, digLogs;
+        vector<pair<string, string>> digVec;
+        vector<pair<string, string>> charVec;
         
-        for(auto str : logs)
+        for(string& log : logs)
         {
-            for(int i=0; i<str.size()-1; i++)
+            int pos = log.find(' ');
+            string key = log.substr(0, pos);
+            string val = log.substr(pos + 1);
+            
+            if(isdigit(val[0]))
             {
-                if(str[i] == ' ')
-                {
-                    if((str[i+1] >= '0' && str[i+1] <= '9'))
-                    {
-                        digLogs.push_back(str);
-                        break;
-                    }
-                    else
-                    {
-                        letLogs.push_back(str);
-                        break;
-                    }
-                }
+                digVec.push_back({key, val});
+            }
+            else
+            {
+                charVec.push_back({key, val});
             }
         }
         
-        sort(letLogs.begin(), letLogs.end(), sortLetterLogs);
+        sort(charVec.begin(), charVec.end(), mySort);
         
-        move(digLogs.begin(), digLogs.end(), back_inserter(letLogs));
-        // letLogs.insert(letLogs.end(), digLogs.begin(), digLogs.end());
-        
-        return letLogs;
-    }
-    
-    static bool sortLetterLogs(string& a, string& b)
-    {
-        int idx = 0;
-        string aId, bId, aLog, bLog;
-        
-        for(int i=0; i<a.size(); i++)
+        for(auto& keyVal : charVec)
         {
-            if(a[i] == ' ') { idx = i; break; }
+            retVec.push_back(keyVal.first + " " + keyVal.second);
         }
         
-        aId = a.substr(0, idx);
-        aLog = a.substr(idx+1);
-        
-        for(int i=0; i<b.size(); i++)
+        for(auto& keyVal : digVec)
         {
-            if(b[i] == ' ') { idx = i; break; }
+            retVec.push_back(keyVal.first + " " + keyVal.second);
         }
         
-        bId = b.substr(0, idx);
-        bLog = b.substr(idx+1);
-        
-        if(aLog == bLog)
-            return aId < bId;
-        
-        return aLog < bLog;
+        return retVec;
     }
 };
