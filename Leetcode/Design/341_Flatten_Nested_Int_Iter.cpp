@@ -32,40 +32,39 @@
  * };
  */
 class NestedIterator {
-    vector<int> flatList;
-    int idx;
+    queue<int> localQ;
+    
+    void addEntryToQueue(NestedInteger& currNI)
+    {
+        if(!currNI.isInteger())
+        {
+            vector<NestedInteger>& currVec = currNI.getList();
+
+            for(auto& tmp : currVec)
+                addEntryToQueue(tmp);
+        }
+        else
+        {
+            localQ.push(currNI.getInteger());
+        }
+    }
 public:
     NestedIterator(vector<NestedInteger> &nestedList) {
-        flattenList(nestedList);
-        idx = 0;
-    }
-
-    int next() {
-        int val = flatList[idx];
-        idx++;
-        return val;
-    }
-
-    bool hasNext() {
-        if(idx < flatList.size())
-            return true;
-        
-        return false;
+        for(auto& currNI : nestedList)
+        {
+            addEntryToQueue(currNI);
+        }
     }
     
-    void flattenList(vector<NestedInteger>& nestedList)
-    {
-        for(int i=0; i < nestedList.size(); i++)
-        {
-            if(nestedList[i].isInteger())
-            {
-                flatList.push_back(nestedList[i].getInteger());
-            }
-            else
-            {
-                flattenList(nestedList[i].getList());
-            }
-        }
+    int next() {
+        int retVal = localQ.front();
+        localQ.pop();
+        
+        return retVal;
+    }
+    
+    bool hasNext() {
+        return !localQ.empty();
     }
 };
 
