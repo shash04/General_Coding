@@ -74,6 +74,78 @@ public:
 };
 */
 
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+// *****************************************************************************************
+// BFS
+// *****************************************************************************************
+class Solution {
+    unordered_map<Node*, Node*> deepCopy;
+    
+public:
+    Node* cloneGraph(Node* node) {
+        if(node == NULL)
+            return NULL;
+        
+        queue<Node*> q1;
+        
+        Node* copyHead = new Node(node->val);
+        
+        deepCopy[node] = copyHead;
+        
+        q1.push(node);
+        
+        while(!q1.empty())
+        {
+            int qSize = q1.size();
+            
+            while(qSize--)
+            {
+                Node* currNode = q1.front();
+                q1.pop();
+                
+                for(auto& neighbor : currNode->neighbors)
+                {
+                    if(deepCopy.count(neighbor) == 0)
+                    {
+                        deepCopy[neighbor] = new Node(neighbor->val);
+                        q1.push(neighbor);
+                    }
+                    
+                    deepCopy[currNode]->neighbors.push_back(deepCopy[neighbor]);
+                }
+            }
+        }
+        
+        return copyHead;
+    }
+};
+
+// *****************************************************************************************
+// DFS
+// *****************************************************************************************
 class Solution {
     unordered_map<Node*, Node*> deepCopy;
 public:
