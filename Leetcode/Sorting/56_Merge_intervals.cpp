@@ -16,24 +16,29 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        vector<vector<int>> result;
+        vector<vector<int>> retVec;
+        
         if(!intervals.size())
-            return result;
+            return retVec;
         
         sort(intervals.begin(), intervals.end());                   // Sort the pairs for increasing start times
+        
         int n = intervals.size();
         
         for(int i=0; i<n; i++)
         {
             int curr_start  = intervals[i][0];
             int curr_end    = intervals[i][1];
+            
             while(i+1<n && curr_end >= intervals[i+1][0])           // If next start time <= curr end time = Overlap found
             {
                 curr_end = max(curr_end, intervals[i+1][1]);        // Maintain max value for end time
                 i++;
             }
-            result.push_back({curr_start, curr_end});               // No more overlap found. Add to result vector.
+            
+            retVec.push_back({curr_start, curr_end});               // No more overlap found. Add to retVec vector.
         }
-        return result;
+        
+        return retVec;
     }
 };
