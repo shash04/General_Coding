@@ -24,16 +24,77 @@
 
 // https://leetcode.com/problems/perfect-rectangle/
 
-/*
-Validate 2 conditions = 
-1)
-Get all y points for each x - map 1
-Get all x points for each y - map 2
-for every entry in m1 and m2 - sort vector - all values should be contiguous
+// **************************************************************************************************
+// Concept - A rectangle has four vertices- 
+// For every rectangle get vertices and add the hash the set in the form of string
+// if the vertices overlap, it means the edges form a continuous line, thus remove that vertex
+// In the end, we should be left with only 4 vertices as all others should overlap and form lines
+// Checking area too for overlapping rectangles condition 
+// **************************************************************************************************
+class Solution {
+    void updateSet(unordered_set<string>& strSet, string& s)
+    {
+        if(strSet.count(s))
+            strSet.erase(s);
+        else
+            strSet.insert(s);
+    }
+    
+    string getHash(int& x, int& y)
+    {
+        return to_string(x) + " " + to_string(y);
+    }
+public:
+    bool isRectangleCover(vector<vector<int>>& rectangles) {
+        if(rectangles.size() == 0)
+            return false;
+        
+        unordered_set<string> strSet;
+        
+        int area = 0;
+        int minX, minY, maxX, maxY;
+        
+        maxX = maxY = 0;
+        minX = minY = INT_MAX;
+        
+        for(auto rect : rectangles)
+        {
+            minX = min(minX, rect[0]);
+            minY = min(minY, rect[1]);
+            maxX = max(maxX, rect[2]);
+            maxY = max(maxY, rect[3]);
 
-2)
-check for area sum == total area
-*/
+            area += (rect[2] - rect[0]) * (rect[3] - rect[1]);
+            
+            string bl = getHash(rect[0], rect[1]);
+			string br = getHash(rect[0], rect[3]);
+			string tl = getHash(rect[2], rect[1]);
+            string tr = getHash(rect[2], rect[3]);
+            
+            updateSet(strSet, bl);
+            updateSet(strSet, br);
+            updateSet(strSet, tl);
+            updateSet(strSet, tr);
+        }
+        
+        return (strSet.count(getHash(minX, minY))
+            && strSet.count(getHash(minX, maxY))
+            && strSet.count(getHash(maxX, minY))
+            && strSet.count(getHash(maxX, maxY))
+            && strSet.size() == 4
+            && area == (maxX - minX) * (maxY - minY));
+    }
+};
+
+// **************************************************************************************************
+// Concept - Validate 2 conditions = 
+// 1)
+// Get all y points for each x - map 1
+// Get all x points for each y - map 2
+// for every entry in m1 and m2 - sort vector - all values should be contiguous
+// 2)
+// check for area sum == total area
+// **************************************************************************************************
 
 class Solution {
 public:
