@@ -15,6 +15,26 @@
 
 // https://leetcode.com/problems/jump-game/
 
+// *********************************************************************************
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        if(nums.size() == 0)
+            return false;
+        
+        int i = 0;
+        int maxReach = 0;
+        
+        for(; i < nums.size() && i <= maxReach; i++)
+        {
+            maxReach = max(maxReach, i + nums[i]);
+        }
+        
+        return i == nums.size();
+    }
+};
+
+// *********************************************************************************
 class Solution {
 public:
     bool canJump(vector<int>& nums) {
