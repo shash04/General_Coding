@@ -11,6 +11,52 @@
 
 // https://leetcode.com/problems/permutations-ii/
 
+// ******************************************************************************************************
+// Solution with extra space but easy to understsand
+// ******************************************************************************************************
+
+class Solution {
+    unordered_map<int, int> numMap;
+    
+    void backtrack(vector<vector<int>>& retVec, vector<int> currVec, int len)
+    {
+        if(currVec.size() == len)
+        {
+            retVec.push_back(currVec);
+            return;
+        }
+        
+        for(auto& entry : numMap)
+        {
+            if(entry.second > 0)
+            {
+                entry.second--;
+                currVec.push_back(entry.first);
+                
+                backtrack(retVec, currVec, len);
+                
+                currVec.pop_back();
+                entry.second++;
+            }
+        }
+    }
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> retVec;
+        
+        for(int& n : nums)
+            numMap[n]++;
+        
+        backtrack(retVec, {}, nums.size());
+        
+        return retVec;
+    }
+};
+
+// ******************************************************************************************************
+// Solution with no extra space but difficult to understand no to swap back logic
+// ******************************************************************************************************
+
 class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
