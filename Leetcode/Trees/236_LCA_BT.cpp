@@ -32,29 +32,16 @@
  * };
  */
 class Solution {
-    TreeNode* findLCA(TreeNode* root, TreeNode* p, TreeNode* q, bool& found1, bool& found2)
+    TreeNode* findLCA(TreeNode* root, TreeNode* p, TreeNode* q)
     {
-        if(root == NULL)
-            return NULL;
-        
-        // if root == p node, set found1 to true and return p
-        // Note - if q is in subtree of p, then p is LCA - as returning no recursive call for q
-        // thus found2 will not be set to true - thus important to check later on if q actually is present in tree
-        if(root == p)
-        {
-            found1 = true;
+        // One node can be ancestor of other, that case is handled on its own as
+        // as it is checked before that both nodes exist in the tree
+        if(root == NULL || root == p || root == q)
             return root;
-        }
-        
-        if(root == q)
-        {
-            found2 = true;
-            return root;
-        }
-        
+
         // Check if p and q present in left and right subtrees
-        TreeNode* presentInLeft  = findLCA(root->left, p, q, found1, found2);
-        TreeNode* presentInRight = findLCA(root->right, p, q, found1, found2);
+        TreeNode* presentInLeft  = findLCA(root->left, p, q);
+        TreeNode* presentInRight = findLCA(root->right, p, q);
         
         // if both left and right subtree returned with valid pointer
         // each present in individual subtrees and cur node is LCA
@@ -79,16 +66,10 @@ class Solution {
     }
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL)
-            return root;
+        // Return NULL if root is NULL or either of the nodes are not present in the tree
+        if(root == NULL || !findNode(root, q) || !findNode(root, p))
+            return NULL;
         
-        bool found1 = false, found2 = false;
-        
-        TreeNode* lca = findLCA(root, p, q, found1, found2);
-        
-        if( (found1 && found2) || (found1 && findNode(root, q)) || (found2 && findNode(root, p)) )
-           return lca;
-           
-       return NULL;
+        return findLCA(root, p, q);
     }
 };
