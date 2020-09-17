@@ -8,18 +8,41 @@
 // ************************************************************************************
 // Non-recursive approach = p and q will be on one side of tree till common ancestor
 // ************************************************************************************
-class Solution {
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {    
+    bool findNode(TreeNode* root, TreeNode* n)
+    {
+        if(root == NULL || root == n)
+            return true;
+        else if(n->val < root->val)
+            return findNode(root->left, n);
+        else
+            return findNode(root->right, n);
+    }
 public:
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        if(root == NULL)
+        // Return NULL if root is NULL or either of the nodes are not present in the tree
+        if(root == NULL || !findNode(root, p) || !findNode(root, q))
             return NULL;
         
         while(root)
         {
+            // both p and q lie in left subtree
             if((p->val < root->val) && (q->val < root->val))
                 root = root->left;
+            // both p and q lie in right subtree
             else if((p->val > root->val) && (q->val > root->val))
                 root = root->right;
+            // either current node is p OR q
+            // OR both nodes present in different subtrees
             else
                 break;
         }
