@@ -25,6 +25,8 @@ public:
         if(n < 10)
             return n;
         
+        // Starting with multiple of 9 and number of digits = 1
+        // increments as (count of numbers - num of digits) : 9 - 1; 90 - 2; 900 - 3
         long m = 9, d = 1;
         
         while( (n - m * d) > 0)
@@ -39,6 +41,7 @@ public:
         int offset = (n - 1) / d;
         int index = (n - 1) % d;
         
+        // smart way of returning correct index number
         // return to_string(start + offset)[index] - '0';
         
         int nthNum = start + offset;
