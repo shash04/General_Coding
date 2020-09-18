@@ -31,10 +31,12 @@
 // https://leetcode.com/problems/insert-delete-getrandom-o1/
 
 class RandomizedSet {
-public:
-    unordered_map<int,int> m1;                      // map to keep val as key and index as value
-    vector<int> v1;                                 // vector for returning element at random index
+    // Insert and removal is O(1) for unordered_map / unordered_set
+    // vector and map (number, index in vector) are required for O(1) getRandom 
+    unordered_map<int, int> m1;
+    vector<int> v1;
     
+public:
     /** Initialize your data structure here. */
     RandomizedSet() {
         
@@ -42,35 +44,43 @@ public:
     
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     bool insert(int val) {
-        bool flag = false;
-        if(m1.find(val) == m1.end())
-        { 
-            flag = true;
-            v1.push_back(val);
-            m1[val] = v1.size() - 1;
-        }
-        return flag;
+        if(m1.count(val))
+            return false;
+        
+        // insert at back of vector and add that index to map
+        v1.push_back(val);
+        m1[val] = v1.size() - 1;
+        
+        return true;
     }
     
     /** Removes a value from the set. Returns true if the set contained the specified element. */
     bool remove(int val) {
-        bool flag = false;
-        if(m1.find(val) != m1.end())
-        {
-            flag = true;
-            int index = m1[val];                // Get index of val to be removed
-            v1[index] = v1[v1.size()-1];        // Replace value at index in vector with val at last index of vector
-            v1.pop_back();                      // Remove val at last index of vector
-            m1[v1[index]] = index;              // Update index of value copied to index
-            m1.erase(val);                      // Remove the val
-        }
-        return flag;
+        if(!m1.count(val))
+            return false;
+        
+        // remove that entry from map and update vector
+        // NOTE - removal from vector is ideally not O(1)
+        // As the order is not relevant, we can swap the val (index from map) with last element - O(1)
+        // and pop back from vector - O(1)
+        
+        int valIdx = m1[val];
+    
+        m1[v1[v1.size() - 1]] = valIdx;
+        
+        swap(v1[valIdx], v1[v1.size() - 1]);
+        
+        m1.erase(val);
+        v1.pop_back();
+        
+        return true;
     }
     
     /** Get a random element from the set. */
-    int getRandom() {       
-        int random_num = rand() % v1.size();
-        return v1[random_num];
+    int getRandom() {
+        int rIdx = rand() % v1.size();
+        
+        return v1[rIdx];
     }
 };
 
