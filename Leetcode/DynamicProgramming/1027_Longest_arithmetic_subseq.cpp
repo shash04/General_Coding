@@ -27,6 +27,11 @@
 
 // https://leetcode.com/problems/longest-arithmetic-subsequence/
 
+// ************************************************************************
+// Optimized solution for time
+// Find max diff possible in the given array = 2 * maxVal + 1
+// Create a 2D array with indexing as [difference][A vector indices]
+// ************************************************************************
 class Solution {
 public:
     int longestArithSeqLength(vector<int>& A) {
@@ -53,6 +58,45 @@ public:
                 dp[diff][i] = dp[diff][j] + 1;
                 
                 maxLen = max(maxLen, dp[diff][i]);
+            }
+        }
+        
+        return maxLen + 1;
+    }
+};
+
+// ************************************************************************
+// Natural response
+// Create a 2D array with indexing as [A vector indices][difference]
+// arithmatic sequence - difference d is important
+// for every number
+// - iterate throught all prev numbers and find d
+// - add the entry or increment the entry of d and store per index
+// - per index we need to keep track of multiple diff d (2D array)
+// ************************************************************************
+
+class Solution {
+public:
+    int longestArithSeqLength(vector<int>& A) {
+        if(A.size() == 0)
+            return 0;
+        
+        int maxLen = 1;
+        
+        unordered_map<int, unordered_map<int, int>> idxDiff;
+        
+        for(int i = 1; i < A.size(); i ++)
+        {
+            for(int j = 0; j < i; j++)
+            {
+                int d = A[i] - A[j];
+                
+                if(idxDiff[j].count(d))
+                    idxDiff[i][d] = 1 + idxDiff[j][d];
+                else
+                    idxDiff[i][d] = 1;
+                
+                maxLen = max(maxLen, idxDiff[i][d]);
             }
         }
         
