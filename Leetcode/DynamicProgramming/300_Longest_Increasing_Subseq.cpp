@@ -23,6 +23,8 @@ public:
         if(nums.size() == 0)
             return 0;
         
+        int maxLis = 0;
+        
         // Start with dp and all elements as 1 - min longest subsequence is num itself
         vector<int> dp (nums.size(), 1);
         
@@ -36,14 +38,35 @@ public:
                 if(nums[j] < nums[i])
                     dp[i] = max(dp[i], 1 + dp[j]);
             }
-        }
-        
-        // max LIS can be at any index in the dp array - iterate to find it
-        int maxLis = 0;
-        
-        for(int i=0; i < nums.size(); i++)
+
             maxLis = max(maxLis, dp[i]);
+        }            
         
         return maxLis;
+    }
+};
+
+// **************************************************************************************************
+// Lower Bound approach - O(Log(N) complexity
+// **************************************************************************************************
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size() == 0)
+            return 0;
+        
+        vector<int> v1;
+        
+        for(int& n : nums)
+        {
+            auto iter = lower_bound(v1.begin(), v1.end(), n);
+            
+            if(iter != v1.end())
+                *iter = n;
+            else
+                v1.push_back(n);
+        }
+        
+        return v1.size();
     }
 };
