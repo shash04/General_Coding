@@ -66,22 +66,26 @@ public:
         if(nums.size() < 2)
             return false;
         
-        unordered_set<int> remSet;
+        int curSum = 0;
+        int prevSum = 0;
         
-        int sum = 0, pre = 0;
+        unordered_set<int> remainderSet;
         
-        for(int i=0; i < nums.size(); i++)
+        for(int& i : nums)
         {
-            sum += nums[i];
+            curSum += i;
             
             if(k != 0)
-                sum = sum % k;
+                curSum = curSum % k;
             
-            if(remSet.count(sum))
+            // Same remainder was found earlier = sum of numbers in between is multiple of k
+            if(remainderSet.count(curSum))
                 return true;
-
-            remSet.insert(pre);
-            pre = sum;
+            
+            // Add previous sum as the loop runs one index ahead and min subarray size required is 2
+            remainderSet.insert(prevSum);
+            
+            prevSum = curSum;
         }
         
         return false;
