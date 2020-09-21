@@ -70,3 +70,51 @@ public:
         return result;
     }
 };
+
+// **************************************************************************************************************
+// Concept - UNION FIND - Use parent vector to keep track of disjoint sets
+// Every node begins as parent of its own. With every edge, if parent isn't same, make one parent of other
+// Thus union of two nodes (sets). In the end, ans = number of disjoint nodes (sets)
+// *************************************************************************************************************
+class Solution {
+    int findParent(vector<int>& parentVec, int node)
+    {
+        // If the node is its own parent, return the node
+        if(parentVec[node] == node)
+            return node;
+        
+        // If the node has a different parent than itself, it is part of a union with a differnt parent
+        // Recusive call to find the parent. NOTE: Last Node will be its own parent and thus returned.
+        return findParent(parentVec, parentVec[node]);
+    }
+public:
+    int countComponents(int n, vector<vector<int>>& edges) {    
+        vector<int> parentVec;
+        
+        // Every node is its own parent in the beginning
+        for(int i = 0; i < n; i++)
+            parentVec.push_back(i);
+        
+        int result = 0;
+        
+        for(auto& edge : edges)
+        {
+            int x = findParent(parentVec, edge[0]);
+            int y = findParent(parentVec, edge[1]);
+            
+            // If parents of both nodes are not same, make one parent of other
+            // This step is basically union of two sets
+            if(x != y)
+                parentVec[y] = x;
+        }
+        
+        for(int i = 0; i < n; i++)
+        {
+            // If the node is its own parent, it is in disjoint set
+            if(parentVec[i] == i)
+                result++;
+        }
+        
+        return result;
+    }
+};
