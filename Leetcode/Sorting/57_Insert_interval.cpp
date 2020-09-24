@@ -12,6 +12,56 @@
 
 // https://leetcode.com/explore/interview/card/google/63/sorting-and-searching-4/445/
 
+// ************************************************************************************************************
+// Complexity - O(N)
+// ************************************************************************************************************
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+       vector<vector<int>> result;
+        
+        if(intervals.size() == 0)
+            return {newInterval};
+        
+        if(newInterval.size() == 0)
+            return intervals;
+        
+        int start = newInterval[0];
+        int end = newInterval[1];
+        
+        int idx = 0;
+            
+        // idx++ till start time of interval to be inserted is greater than end times
+        while(idx < intervals.size() && start > intervals[idx][1])
+            result.push_back(intervals[idx++]);
+        
+        if(idx == intervals.size())
+        {
+            result.push_back(newInterval);
+            return result;
+        }
+
+        while(idx < intervals.size() && intervals[idx][0] <= end)
+        {
+            start   = min(start, intervals[idx][0]);
+            end     = max(end, intervals[idx][1]);
+            idx++;
+        }
+
+        // newE = max(newE, intervals[idx-1][1]);
+
+        result.push_back({start, end});
+        
+        while(idx < intervals.size())
+            result.push_back(intervals[idx++]);
+        
+        return result;
+    }
+};
+
+// ************************************************************************************************************
+// Concept - insert newInterval and sort and merge - complexity - Nlog(N)
+// ************************************************************************************************************
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
