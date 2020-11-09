@@ -124,6 +124,7 @@ public:
                 {
                     numIslands++;
                     DFS(grid, i, j);
+                    // BFS(grid, i, j);
                 }
             }
         }
@@ -144,6 +145,37 @@ public:
                 continue;
             
             DFS(grid, R, C);
+        }
+    }
+
+    void BFS(vector<vector<char>>& grid, int& i, int& j)
+    {
+        grid[i][j] = '0';
+        queue<pair<int, int>> q1;
+        q1.push({i, j});
+        
+        while(!q1.empty())
+        {
+            int qSize = q1.size();
+            
+            while(qSize--)
+            {
+                int r = q1.front().first;
+                int c = q1.front().second;
+                q1.pop();
+                
+                for(auto& dir : dirs)
+                {
+                    int R = r + dir.first;
+                    int C = c + dir.second;
+                    
+                    if(R < 0 || R >= nR || C < 0 || C >= nC || grid[R][C] == '0')
+                        continue;
+                    
+                    grid[R][C] = '0';
+                    q1.push({R,C});
+                }
+            }
         }
     }
 };

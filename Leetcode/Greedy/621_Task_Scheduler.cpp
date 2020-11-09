@@ -47,7 +47,6 @@ public:
         vector<int> charFreq (26, 0);
         
         int maxFreqUnits = 0;
-        int numTasks = 0;
         
         for(char& c : tasks)
         {
@@ -69,12 +68,9 @@ public:
         {
             if(maxFreq == charFreq[i])
                 maxFreqUnits++;
-            
-            if(charFreq[i] > 0)
-                numTasks += charFreq[i];
         }
         
         // Return max of maxFreqUnits calculated and total number of tasks
-        return max(maxFreqUnits, numTasks);
+        return max(maxFreqUnits, (int)tasks.size());
     }
 };

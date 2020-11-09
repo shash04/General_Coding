@@ -18,6 +18,15 @@
 
 // https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/
 
+/*
+Let's say you've iterated to index 5 (randomly chosen) and your sum from index 0 to 5 so far is 7, and k is 3. sum - k in this case is 4.
+
+What m1.find(sum-k) returns is the index where the sum of every element up to that index from index 0 is sum - k, or (7 - 3) == 4, in our example.
+Let's say that that index returned by m1[sum-k] is 2 (randomly chose one that is before index 5).
+So knowing that at index 2 the total sum is 4, and at index 5, the total sum is 7,
+that means the elements between index 2 and index 5 incremented the total sum by 3, or k!
+*/
+
 class Solution {
 public:
     int maxSubArrayLen(vector<int>& nums, int k) {

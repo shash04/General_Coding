@@ -68,6 +68,7 @@ public:
             if(!isdigit(str[i]))
                 break;
             
+            // INT_MAX value = 2,147,483,647 (inclusive) (2^31 -1)
             if(ans > INT_MAX/10 || (ans == INT_MAX/10 && str[i] - '0' > 7 ))
             {
                 return isNegative ? INT_MIN : INT_MAX;

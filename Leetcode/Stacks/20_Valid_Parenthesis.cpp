@@ -11,38 +11,38 @@
 class Solution {
 public:
     bool isValid(string s) {
-        stack<char> s1;
+        stack<char> par;
         
-        for(char& c : s)
+        for(int i=0; i<s.size(); i++)
         {
-            if(c == '(' || c == '[' || c == '{')
-                s1.push(c);
-            
-            else if(c == ')' || c == ']' || c == '}')
+            if(s[i]==')' || s[i]==']' || s[i]=='}')
             {
-                if(s1.empty())
+                if(par.empty() || !isValidClosing(s[i], par))
                     return false;
-                
-                if(!checkIfValidClosing(s1.top(), c))
-                    return false;
-                
-                s1.pop();
+                else
+                    par.pop();
+            }
+            if(s[i]=='(' || s[i]=='[' || s[i]=='{')
+            {
+                par.push(s[i]);
             }
         }
         
-        if(!s1.empty())
+        if(par.empty())
+            return true;
+        else
             return false;
-        
-        return true;
     }
     
-    bool checkIfValidClosing(char& open, char& close)
+    bool isValidClosing(const char &closing, const stack<char> &par)
     {
-        if((open == '(' && close == ')') ||
-           (open == '[' && close == ']') ||
-           (open == '{' && close == '}'))
+        char opening = par.top();
+        if(opening == '(' && closing == ')')
             return true;
-        
+        if(opening == '[' && closing == ']')
+            return true;
+        if(opening == '{' && closing == '}')
+            return true;
         return false;
     }
 };

@@ -18,7 +18,9 @@
 
 // https://leetcode.com/problems/k-closest-points-to-origin/
 
-// Optimized solution
+// ****************************************************************************
+// Optimized solution - using nth_element function
+// ****************************************************************************
 class Solution {
 public:
   static bool isLhsSmaller(const vector<int>& lhs, const vector<int> &rhs) {
@@ -32,39 +34,87 @@ public:
   }
 };
 
-// My original solution
-// vector dist holds all distances. distMap holds vector of points for each distance
-// sort dist vector and get first k points from map
+// ****************************************************************************
+// Ordered Map with key - distance and val - vector of points with that dist
+// ****************************************************************************
 class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
-        vector<double> dist;
-        unordered_map<double, vector<vector<int>>> distMap;
-        vector<vector<int>> ret;
-        for(int i=0; i<points.size(); i++)
+        map<double, vector<vector<int>>> distMap;
+        vector<vector<int>> result;
+
+        // Populate distMap. As it is ordered map, entries will be sorted according to dist
+        for(int i = 0; i < points.size(); i++)
         {
             int x = points[i][0];
             int y = points[i][1];
+
             double curr_dist = sqrt(x*x + y*y);
-            dist.push_back(curr_dist);
+
             distMap[curr_dist].push_back(points[i]);
         }
         
-        sort(dist.begin(), dist.end());
-        int n = dist.size();
-        
-        int kIter = 0;
-        while(kIter != K)
+        // Iterate over map and add first K points to result
+        for(auto& entry : distMap)
         {
-            vector<vector<int>> curr_dist_vec = distMap[dist[kIter]];
-            for(int i=0; i<curr_dist_vec.size() && kIter != K; i++)
+            vector<vector<int>> curPoints = entry.second;
+            
+            for(int i = 0; i < curPoints.size() && K; i++)
             {
-                vector<int> currPoint = curr_dist_vec[i];
-                ret.push_back(currPoint);
-                kIter++;
-            }            
+                result.push_back(curPoints[i]);
+                K--;
+            }
         }
         
-        return ret;
+        return result;
+    }
+};
+
+// ****************************************************************************
+// Using priority Queue
+// ****************************************************************************
+class Solution {
+    double getDistFromOrigin(const vector<int>& a)
+    {
+        int x = a[0];
+        int y = a[1];
+        
+        return sqrt(x*x + y*y);
+    }
+    
+    struct mySort
+    {
+        bool operator()(const pair<double, vector<int>>& a, const pair<double, vector<int>>& b)
+        {
+            return a.first <= b.first;
+        }
+    };
+    
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        vector<vector<int>> result;
+        
+        if(points.size() < K)
+            return result;
+        
+        priority_queue<pair<double, vector<int>>, vector<pair<double, vector<int>>>, mySort> pq;
+        
+        for(vector<int>& point : points)
+        {
+            double curDist = getDistFromOrigin(point);
+            
+            pq.push(make_pair(curDist, point));
+            
+            if(pq.size() > K)
+                pq.pop();
+        }
+        
+        while(!pq.empty())
+        {
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+        
+        return result;
     }
 };

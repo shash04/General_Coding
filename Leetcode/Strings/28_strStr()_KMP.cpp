@@ -47,6 +47,9 @@ public:
         return -1;
     }
     
+    // looks for suffix that matches prefix
+    // for eg. needle = aabdaab
+    // suffix - aab matches prefix aab
     void fillPatternLps(vector<int> &lps, string needle)
     {
         int n = needle.length();
@@ -59,6 +62,7 @@ public:
                 lps[i] = index + 1;
                 index++; i++;
             }
+            // if match, find longest suffix that is also prefix just before mismatch from lps[index-1]
             else if(index != 0)
             {
                 index = lps[index-1];
