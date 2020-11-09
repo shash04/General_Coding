@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <queue>
+#include <unordered_map>
 using namespace std;
 
 struct node
@@ -63,6 +64,28 @@ void print_tree(node *root)
   print_tree(root->right);
 }
 
+
+unordered_map<int,int> levelSum(node* root)
+{
+    unordered_map<int, int> m1;
+    levelSumUtil(root, m1, 0);
+    return m1;
+}
+
+void levelSumUtil(node* root, unordered_map<int, int>& m1, int level)
+{
+      if(root == NULL)
+          return;
+
+      if(m1.find(level) != m1.end())
+        m1[level] = m1[level] + root->val;
+      else
+        m1[level] = root->val;
+
+      levelSumUtil(root->left, m1, level-1);
+      levelSumUtil(root->right, m1, level+1);
+}
+
 int main()
 {
   node *root = NULL;
@@ -74,6 +97,11 @@ int main()
   add_node(root->right->left, 6);
   add_node(root->right->right, 9);
   // print_tree(root_1);
+
+  unordered_map<int,int> m1 = levelSum(root);
+
+  for(auto i:m1)
+    cout<<i.first<<" "<<i.second<<endl;
 
   depthFirstSearch(root);
   cout << endl;
