@@ -28,7 +28,7 @@
 // *******************************************************************************************************
 
 // Adding new custom class for comparator overload
-// Need to reverse sort the entry to priority queue
+// Priority Queue is max heap by default. Thus the compartor is greater than.
 class SortByVal{
 public:
     bool operator()(pair<string, int>& a, pair<string, int>& b)
@@ -53,7 +53,18 @@ public:
         // Min Heap Priority queue
         // Format for min heap priority queue : priority_queue <int, vector<int>, greater<int>> pq;
         // Special case as each element is a pair<string, int>
-        priority_queue<pair<string, int>, vector<pair<string, int>>, SortByVal> pq;
+        //priority_queue<pair<string, int>, vector<pair<string, int>>, SortByVal> pq;
+        
+        // Alternate way to declare custom pq
+        auto comp = [&](const pair<string, int>& a, const pair<string, int>& b){
+            if(a.second == b.second)
+                return a.first < b.first;
+            else
+                return a.second > b.second;
+        };
+        
+        typedef priority_queue<pair<string, int>, vector<pair<string, int>>, decltype(comp)> PRIORITY_QUEUE;
+        PRIORITY_QUEUE pq(comp);
         
         for(auto entry : freq)
         {
