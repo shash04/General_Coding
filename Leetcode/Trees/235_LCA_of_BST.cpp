@@ -20,7 +20,9 @@
 class Solution {    
     bool findNode(TreeNode* root, TreeNode* n)
     {
-        if(root == NULL || root == n)
+        if(root == NULL)
+            return false;
+        else if(root == n)
             return true;
         else if(n->val < root->val)
             return findNode(root->left, n);
