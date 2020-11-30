@@ -17,33 +17,44 @@
 
 // https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/
 
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
     unordered_map<int, int> inMap;
 public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         for(int i = 0; i < inorder.size(); i++)
             inMap[inorder[i]] = i;
         
-        // for every preorder[preIdx] node in inorder, all nodes to left of preorder[preIdx] will be in left subtree
-        // and all nodes to right of preorder[preIdx] will be in right subtree
-        // create node for preorder[preIdx] and recursively call helper by splitting inorder in left and right subtrees
-        return buildTreeHelper(preorder, 0, 0, inorder.size() - 1);
+        // for every postorder[postIdx] node in inorder, all nodes to left of postorder[postIdx] will be in left subtree
+        // and all nodes to right of postorder[postIdx] will be in right subtree
+        // create node for postorder[postIdx] and recursively call helper by splitting inorder in left and right subtrees
+        return buildTreeHelper(postorder, postorder.size() - 1, 0, inorder.size() - 1);
     }
     
-    TreeNode* buildTreeHelper(vector<int>& preorder, int preIdx, int inStart, int inEnd)
+    TreeNode* buildTreeHelper(vector<int>& postorder, int postIdx, int inStart, int inEnd)
     {
-        if(preIdx >= preorder.size() || inStart > inEnd)
+        if(postIdx >= postorder.size() || inStart > inEnd)
             return NULL;
         
-        TreeNode* newNode = new TreeNode(preorder[preIdx]);
+        TreeNode* newNode = new TreeNode(postorder[postIdx]);
         
-        int inIdx = inMap[preorder[preIdx]];
+        int inIdx = inMap[postorder[postIdx]];
         
-        // preorder visits all left nodes before first right node. Thus for right node recursive call,
-        // preIdx = preIdx + 1 + numNodesOnLeft= preIdx + 1 + (inIdx - inStart)
-        
-        newNode->left = buildTreeHelper(preorder, preIdx + 1, inStart, inIdx - 1);
-        newNode->right = buildTreeHelper(preorder, preIdx + 1 + (inIdx - inStart), inIdx + 1, inEnd);
+        // postorder visits all right nodes before any left node. Thus for left node recursive call,
+        // postIdx = postIdx - 1 - (Number of Nodes to right of inIdx till inEnd) = postIdx - 1 - (inEnd - inIdx)
+
+        newNode->left = buildTreeHelper(postorder, postIdx - 1 - (inEnd - inIdx), inStart, inIdx - 1);
+        newNode->right = buildTreeHelper(postorder, postIdx - 1, inIdx + 1, inEnd);
         
         return newNode;
     }
