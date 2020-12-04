@@ -25,7 +25,6 @@
 // Input: n = 3, red_edges = [[0,1],[0,2]], blue_edges = [[1,0]]
 // Output: [0,1,1]
  
-
 // Constraints:
 // 1 <= n <= 100
 // red_edges.length <= 400
