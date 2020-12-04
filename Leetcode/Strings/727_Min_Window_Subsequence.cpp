@@ -47,7 +47,7 @@ public:
             // All chars in T are matched
             if (pt == lenT)
             {
-                // reverse will go in reverse from ps - to find if there is smaller string in cur window
+                // reverse will go in reverse from ps - to find if there is smaller string match in cur window
                 // pt = pt - 1 as pt is at T.size()
                 int reverse = ps;
                 pt = pt - 1;
