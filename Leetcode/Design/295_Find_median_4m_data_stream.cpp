@@ -32,8 +32,8 @@
 
 class MedianFinder {
 private:
-    priority_queue<int> left;                                    // Max Heap
-    priority_queue<int, vector<int>, greater<int>> right;        // Min Heap
+    priority_queue<int> right;                                    // Max Heap
+    priority_queue<int, vector<int>, greater<int>> left;          // Min Heap
 public:
     /** initialize your data structure here. */
     MedianFinder() {
@@ -41,10 +41,14 @@ public:
     }
     
     void addNum(int num) {
+        // first push the element in left sorted part so it gets placed correctly
         left.push(num);
+
+        // push the top of left to right (max from left part)
         right.push(left.top());
         left.pop();
         
+        // Keep left part size always equal or more than right part
         if(left.size() < right.size())
         {
             left.push(right.top());
