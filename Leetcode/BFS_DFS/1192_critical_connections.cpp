@@ -17,6 +17,64 @@
 
 // https://leetcode.com/problems/critical-connections-in-a-network/
 
+// *************************************************************************************************
+// Easier approach
+// *************************************************************************************************
+class Solution {
+    unordered_map<int, vector<int>> graph;
+    vector<int> visited;
+    vector<int> lowestTime;
+    
+    void DFS(vector<vector<int>>& result, int curNode, int prevNode, int timer)
+    {
+        visited[curNode] = true;
+        lowestTime[curNode] = timer;
+        
+        // Iterate over the neighbors of cur node
+        for(auto& adj : graph[curNode])
+        {
+            if(adj == prevNode)
+                continue;
+            
+            // Don't visited already visited nodes
+            if(!visited[adj])
+                DFS(result, adj, curNode, timer + 1);
+            
+            // update lowest time for curNode. If it is a loop,
+            // adj node will get the lowest time from prev visited node in the loop
+            lowestTime[curNode] = min(lowestTime[curNode], lowestTime[adj]);
+            
+            // Current link is critical link if the lowest time for adj is greater than cur timer + 1
+            if(lowestTime[adj] >= timer + 1)
+                result.push_back({curNode, adj});
+        }
+    }
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<vector<int>> result;
+        
+        if(n == 0 || connections.size() == 0)
+            return result;
+        
+        visited.resize(n, false);
+        lowestTime.resize(n, 0);
+        int timer = 0;
+        
+        for(auto& entry : connections)
+        {
+            graph[entry[0]].push_back(entry[1]);
+            graph[entry[1]].push_back(entry[0]);
+        }
+        
+        DFS(result, 0, -1, timer);
+        
+        return result;
+    }
+};
+
+// *************************************************************************************************
+// Slightly complex Complex approach
+// *************************************************************************************************
 class Solution {
 public:
     
