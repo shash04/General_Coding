@@ -47,6 +47,11 @@ public:
         vector<vector<int>> dp(k + 1, vector<int>(prices.size(), 0));
         
         // i = row = transaction number ; j = col = day number
+        // For every day there are 2 options :
+        // 1) Dont do any transaction : thus profit = dp[i][j-1]
+        // 2) Sell stock. IN that case you need to have bought it before on day t (t : 0 -> j - 1)
+        //    profit = max value of (prices[j] - prices[t] + dp[i-1][t-1]) for (t : 0 -> j - 1)
+        //    This can be converted to prices[j] + max val of (dp[i-1][j-1] - prices[t])
         for(int i = 1; i <= k; i++)
         {
             // start with maxDiff = -prices[0]
@@ -59,7 +64,7 @@ public:
                 
                 dp[i][j] = max(prev, prices[j] + maxDiff);
                 
-                maxDiff = max(maxDiff, dp[i-1][j] - prices[j]);
+                maxDiff = max(maxDiff, dp[i-1][j-1] - prices[j]);
             }
         }
         
