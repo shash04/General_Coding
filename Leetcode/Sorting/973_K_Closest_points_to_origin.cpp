@@ -19,6 +19,71 @@
 // https://leetcode.com/problems/k-closest-points-to-origin/
 
 // ****************************************************************************
+// Quickselect implementation
+// ****************************************************************************
+class Solution {
+    bool farther(vector<int>& p, vector<int>& q)
+    {
+        return (p[0] * p[0] + p[1] * p[1]) > (q[0] * q[0] + q[1] * q[1]);
+    }
+    
+    bool closer(vector<int>& p, vector<int>& q)
+    {
+        return (p[0] * p[0] + p[1] * p[1]) < (q[0] * q[0] + q[1] * q[1]);
+    }
+    
+    int partition(vector<vector<int>>& points, int left, int right)
+    {
+        // Decide left point as pivot
+        // At the end of this function point at pivot will be properly placed in the array and
+        // all points before pivot will be closer to origin
+        int pivot = left;
+        int l = left + 1, r = right;
+        
+        while (l <= r)
+        {
+            // If left point is farther and right point is closer than pivot - swap left and right
+            if (farther(points[l], points[pivot]) && closer(points[r], points[pivot]))
+            {
+                swap(points[l++], points[r--]);
+            }
+            // Else if left point is closer than pivot - increment left ptr
+            if (!farther(points[l], points[pivot]))
+            {
+                l++;
+            }
+            // Else if right pointer is farther than pivot - decrement right ptr
+            if (!closer(points[r], points[pivot]))
+            {
+                r--;
+            }
+        }
+        
+        swap(points[pivot], points[r]);
+        return r;
+    }
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        int left = 0;
+        int right = points.size() - 1;
+        
+        while(true)
+        {
+            int p = partition(points, left, right);
+            
+            if(p == K - 1)
+                break;
+            else if(p < K - 1)
+                left = p + 1;
+            else
+                right = p - 1;
+        }
+        
+        return vector<vector<int>>(points.begin(), points.begin() + K);
+    }
+};
+
+// ****************************************************************************
 // Optimized solution - using nth_element function
 // ****************************************************************************
 class Solution {
